@@ -99,11 +99,10 @@ public class StorageNotification extends StorageEventListener {
          * may not be in a state for export.
          */
         String st = Environment.getExternalStorageState();
-
-        Slog.i(TAG, String.format("UMS connection changed to %s (media state %s)", connected, st));
-
-        if (connected && (st.equals(
-                Environment.MEDIA_REMOVED) || st.equals(Environment.MEDIA_CHECKING))) {
+        String sti = Environment.getInternalStorageState();
+        Slog.i(TAG, String.format("UMS connection(/storage/sdcard0) changed to %s (media state %s)",connected, st));
+        Slog.i(TAG, String.format("UMS connection(/storage/sdcard1) changed to %s (media state %s)",connected, sti));
+        if (connected && (st.equals(Environment.MEDIA_REMOVED) || st.equals(Environment.MEDIA_CHECKING)) && (sti.equals(Environment.MEDIA_REMOVED) || sti.equals(Environment.MEDIA_CHECKING))) {
             /*
              * No card or card being checked = don't display
              */

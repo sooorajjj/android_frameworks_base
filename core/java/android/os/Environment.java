@@ -128,6 +128,9 @@ public class Environment {
 
     private static final File EXTERNAL_STORAGE_DIRECTORY
             = getDirectory("EXTERNAL_STORAGE", "/storage/sdcard0");
+    /*support internel storage*/
+    private static final File INTERNAL_STORAGE_DIRECTORY
+            = getDirectory("INTERNAL_STORAGE", "/storage/sdcard1");
 
     private static final File EXTERNAL_STORAGE_ANDROID_DATA_DIRECTORY = new File(new File(
             getDirectory("EXTERNAL_STORAGE", "/storage/sdcard0"), "Android"), "data");
@@ -188,6 +191,10 @@ public class Environment {
      */
     public static File getExternalStorageDirectory() {
         return EXTERNAL_STORAGE_DIRECTORY;
+    }
+
+    public static File getInternalStorageDirectory() {
+        return INTERNAL_STORAGE_DIRECTORY;
     }
 
     /**
@@ -436,6 +443,19 @@ public class Environment {
             return Environment.MEDIA_REMOVED;
         }
     }
+    /**
+     *Get the current state of the "internal" storage device
+     */
+    public static String getInternalStorageState() {
+        try {
+            IMountService mountService = IMountService.Stub.asInterface(ServiceManager
+                    .getService("mount"));
+            return mountService.getVolumeState(getInternalStorageDirectory().toString());
+        } catch (Exception rex) {
+            return Environment.MEDIA_REMOVED;
+        }
+    }
+
 
     /**
      * Returns whether the primary "external" storage device is removable.

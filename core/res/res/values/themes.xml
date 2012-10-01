@@ -637,6 +637,8 @@ please see themes_device_defaults.xml.
 
         <item name="listPreferredItemPaddingLeft">10dip</item>
         <item name="listPreferredItemPaddingRight">10dip</item>
+
+        <item name="preferencePanelStyle">@style/PreferencePanel.Dialog</item>
     </style>
 
     <!-- Variant of {@link Theme_Dialog} that does not include a frame (or background).
@@ -1576,6 +1578,8 @@ please see themes_device_defaults.xml.
 
         <item name="listPreferredItemPaddingLeft">16dip</item>
         <item name="listPreferredItemPaddingRight">16dip</item>
+
+        <item name="preferencePanelStyle">@style/PreferencePanel.Dialog</item>
     </style>
 
     <!-- Variant of Theme.Holo.Dialog that has a nice minimum width for
@@ -1684,6 +1688,8 @@ please see themes_device_defaults.xml.
 
         <item name="listPreferredItemPaddingLeft">16dip</item>
         <item name="listPreferredItemPaddingRight">16dip</item>
+
+        <item name="preferencePanelStyle">@style/PreferencePanel.Dialog</item>
     </style>
 
     <!-- Variant of Theme.Holo.Light.Dialog that has a nice minimum width for

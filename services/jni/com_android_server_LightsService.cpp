@@ -41,6 +41,7 @@ enum {
     LIGHT_INDEX_ATTENTION = 5,
     LIGHT_INDEX_BLUETOOTH = 6,
     LIGHT_INDEX_WIFI = 7,
+    LIGHT_INDEX_LOW_BATTERY = 8,
     LIGHT_COUNT
 };
 
@@ -78,6 +79,8 @@ static jint init_native(JNIEnv *env, jobject clazz)
                 = get_device(module, LIGHT_ID_BUTTONS);
         devices->lights[LIGHT_INDEX_BATTERY]
                 = get_device(module, LIGHT_ID_BATTERY);
+        devices->lights[LIGHT_INDEX_LOW_BATTERY]
+                = get_device(module, LIGHT_ID_LOW_BATTERY);
         devices->lights[LIGHT_INDEX_NOTIFICATIONS]
                 = get_device(module, LIGHT_ID_NOTIFICATIONS);
         devices->lights[LIGHT_INDEX_ATTENTION]

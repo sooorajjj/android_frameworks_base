@@ -545,6 +545,7 @@ class BatteryService extends Binder {
     class Led {
         private LightsService mLightsService;
         private LightsService.Light mBatteryLight;
+        private LightsService.Light mLowBatteryLight;
 
         private int mBatteryLowARGB;
         private int mBatteryMediumARGB;
@@ -559,6 +560,7 @@ class BatteryService extends Binder {
         Led(Context context, LightsService lights) {
             mLightsService = lights;
             mBatteryLight = lights.getLight(LightsService.LIGHT_ID_BATTERY);
+            mLowBatteryLight = lights.getLight(LightsService.LIGHT_ID_LOW_BATTERY);
 
             mBatteryLowARGB = mContext.getResources().getInteger(
                     com.android.internal.R.integer.config_notificationsBatteryLowARGB);
@@ -578,13 +580,15 @@ class BatteryService extends Binder {
         void updateLightsLocked() {
             final int level = mBatteryLevel;
             final int status = mBatteryStatus;
+            mBatteryLight.turnOff();
+            mLowBatteryLight.turnOff();
             if (level < mLowBatteryWarningLevel) {
                 if (status == BatteryManager.BATTERY_STATUS_CHARGING) {
                     // Solid red when battery is charging
                     mBatteryLight.setColor(mBatteryLowARGB);
                 } else {
                     // Flash red when battery is low and not charging
-                    mBatteryLight.setFlashing(mBatteryLowARGB, LightsService.LIGHT_FLASH_TIMED,
+                    mLowBatteryLight.setFlashing(mBatteryLowARGB, LightsService.LIGHT_FLASH_TIMED,
                             mBatteryLedOn, mBatteryLedOff);
                 }
             } else if (status == BatteryManager.BATTERY_STATUS_CHARGING
@@ -596,9 +600,6 @@ class BatteryService extends Binder {
                     // Solid orange when charging and halfway full
                     mBatteryLight.setColor(mBatteryMediumARGB);
                 }
-            } else {
-                // No lights if not charging and not low
-                mBatteryLight.turnOff();
             }
         }
     }

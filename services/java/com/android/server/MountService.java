@@ -1126,7 +1126,7 @@ class MountService extends IMountService.Stub
                     if (path.equals(internalPath)) {
                         removable = false;
                         emulated = true;
-                        descriptionId = com.android.internal.R.string._storage_internal;
+                        descriptionId = com.android.internal.R.string.storage_internal;
                         allowMassStorage = true;
                         mtpReserve = 100;
                     }

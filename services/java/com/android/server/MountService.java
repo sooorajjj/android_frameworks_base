@@ -1127,12 +1127,16 @@ class MountService extends IMountService.Stub
                         removable = false;
                         emulated = true;
                         descriptionId = com.android.internal.R.string.storage_internal;
+                        allowMassStorage = true;
+                        mtpReserve = 100;
                     }
 
                     if (path.equals(externalPath)) {
                         removable = true;
                         emulated = false;
                         descriptionId = com.android.internal.R.string.storage_sd_card;
+                        allowMassStorage = true;
+                        mtpReserve = 101;
                     }
 
                     Slog.d(TAG, "got storage path: " + path + " description: " + description +

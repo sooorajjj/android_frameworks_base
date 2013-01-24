@@ -1065,31 +1065,12 @@ class MountService extends IMountService.Stub
     private static final String TAG_STORAGE_LIST = "StorageList";
     private static final String TAG_STORAGE = "storage";
 
-    private static final boolean HAS_INTERNAL = SystemProperties.getBoolean("persist.sys.emmcpartition", false);
-    private static final boolean HAS_INTERNAL_ENABLED = SystemProperties.getBoolean("persist.sys.emmcsdcard.enabled", false);
-
-    private boolean mIsInternalAsPrimary = HAS_INTERNAL && HAS_INTERNAL_ENABLED;
-
-    private static final String PRIMARY_PATH = "/storage/sdcard0";
-    private static final String SECONDARY_PATH = "/storage/sdcard1";
-
     private void readStorageList() {
         Resources resources = mContext.getResources();
 
         int id = com.android.internal.R.xml.storage_list;
         XmlResourceParser parser = resources.getXml(id);
         AttributeSet attrs = Xml.asAttributeSet(parser);
-
-        String internalPath = PRIMARY_PATH;
-        String externalPath = SECONDARY_PATH;
-
-        if (mIsInternalAsPrimary) {
-            internalPath = PRIMARY_PATH;
-            externalPath = SECONDARY_PATH;
-        } else {
-            externalPath = PRIMARY_PATH;
-            internalPath = SECONDARY_PATH;
-        }
 
         try {
             XmlUtils.beginDocument(parser, TAG_STORAGE_LIST);
@@ -1122,22 +1103,6 @@ class MountService extends IMountService.Stub
                     // resource parser does not support longs, so XML value is in megabytes
                     long maxFileSize = a.getInt(
                             com.android.internal.R.styleable.Storage_maxFileSize, 0) * 1024L * 1024L;
-
-                    if (path.equals(internalPath)) {
-                        removable = false;
-                        emulated = true;
-                        descriptionId = com.android.internal.R.string.storage_internal;
-                        allowMassStorage = true;
-                        mtpReserve = 100;
-                    }
-
-                    if (path.equals(externalPath)) {
-                        removable = true;
-                        emulated = false;
-                        descriptionId = com.android.internal.R.string.storage_sd_card;
-                        allowMassStorage = true;
-                        mtpReserve = 101;
-                    }
 
                     Slog.d(TAG, "got storage path: " + path + " description: " + description +
                             " primary: " + primary + " removable: " + removable +
@@ -1178,10 +1143,6 @@ class MountService extends IMountService.Stub
             int length = mVolumes.size();
             for (int i = 0; i < length; i++) {
                 mVolumes.get(i).setStorageId(i);
-                StorageVolume volume = mVolumes.get(i);
-                if (volume.isEmulated()) {
-                    mVolumeStates.put(volume.getPath(), Environment.MEDIA_MOUNTED);
-                }
             }
             parser.close();
         }

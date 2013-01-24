@@ -902,8 +902,6 @@
   <java-symbol type="string" name="default_audio_route_name_dock_speakers" />
   <java-symbol type="string" name="default_audio_route_name_hdmi" />
   <java-symbol type="string" name="default_audio_route_category_name" />
-  <java-symbol type="string" name="storage_internal" />
-  <java-symbol type="string" name="storage_sd_card" />
 
   <java-symbol type="plurals" name="abbrev_in_num_days" />
   <java-symbol type="plurals" name="abbrev_in_num_hours" />

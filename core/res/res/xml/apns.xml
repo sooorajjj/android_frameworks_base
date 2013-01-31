@@ -22,4 +22,18 @@
     apns-conf.xml configuration file -->
 <apns version="7">
 
+   <apn carrier="Java Session" apn="java.claro.com.br" mcc="724" mnc="05" user="claro" server="" password="claro" proxy="" port="" mmsproxy="" mmsport="" mmsc="" type="default" authtype="1"/>
+   <apn carrier="Vivo Internet" apn="zap.vivo.com.br" mcc="724" mnc="06" user="vivo" server="" password="vivo" proxy="" port="" mmsproxy="" mmsport="" mmsc="" type="default" authtype="1"/>
+   <apn carrier="Vivo Internet" apn="zap.vivo.com.br" mcc="724" mnc="10" user="vivo" server="" password="vivo" proxy="" port="" mmsproxy="" mmsport="" mmsc="" type="default" authtype="1"/>
+   <apn carrier="Vivo Internet" apn="zap.vivo.com.br" mcc="724" mnc="11" user="vivo" server="" password="vivo" proxy="" port="" mmsproxy="" mmsport="" mmsc="" type="default" authtype="1"/>
+   <apn carrier="Oi Dados" apn="gprs.oi.com.br" mcc="724" mnc="31" user="oi" server="" password="oi" proxy="" port="" mmsproxy="" mmsport="" mmsc="" type="default" authtype="1"/>
+   <apn carrier="TIM Connect" apn="timbrasil.br" mcc="724" mnc="02" user="tim" server="" password="tim" proxy="" port="" mmsproxy="200.179.66.242" mmsport="8080" mmsc="http://mms.tim.br" type="default,mms" authtype="1"/>
+   <apn carrier="TIM Connect" apn="timbrasil.br" mcc="724" mnc="03" user="tim" server="" password="tim" proxy="" port="" mmsproxy="200.179.66.242" mmsport="8080" mmsc="http://mms.tim.br" type="default,mms" authtype="1"/>
+   <apn carrier="TIM Connect" apn="timbrasil.br" mcc="724" mnc="04" user="tim" server="" password="tim" proxy="" port="" mmsproxy="200.179.66.242" mmsport="8080" mmsc="http://mms.tim.br" type="default,mms" authtype="1"/>
+   <apn carrier="Claro Foto" apn="mms.claro.com.br" mcc="724" mnc="05" user="claro" server="" password="claro" proxy="" port="" mmsproxy="200.169.126.10" mmsport="8799" mmsc="http://mms.claro.com.br" type="mms" authtype="1"/>
+   <apn carrier="Vivo MMS" apn="mms.vivo.com.br" mcc="724" mnc="06" user="vivo" server="" password="vivo" proxy="" port="" mmsproxy="200.142.130.104" mmsport="80" mmsc="http://termnat.vivomms.com.br:8088/mms" type="mms" authtype="1"/>
+   <apn carrier="Vivo MMS" apn="mms.vivo.com.br" mcc="724" mnc="10" user="vivo" server="" password="vivo" proxy="" port="" mmsproxy="200.142.130.104"	mmsport="80" mmsc="http://termnat.vivomms.com.br:8088/mms" type="mms" authtype="1"/>
+   <apn carrier="Vivo MMS" apn="mms.vivo.com.br" mcc="724" mnc="11" user="vivo" server="" password="vivo" proxy="" port="" mmsproxy="200.142.130.104"	mmsport="80" mmsc="http://termnat.vivomms.com.br:8088/mms" type="mms" authtype="1"/>
+   <apn carrier="Oi MMS" apn="mmsgprs.oi.com.br" mcc="724" mnc="31" user="oimms" server="" password="oimms" proxy="" port="" mmsproxy="192.168.10.50"	mmsport="3128" mmsc="http://200.222.42.204:8002" type="mms" authtype="1"/>
+
 </apns>

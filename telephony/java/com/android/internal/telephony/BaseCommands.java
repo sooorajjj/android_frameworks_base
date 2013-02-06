@@ -811,6 +811,8 @@ public abstract class BaseCommands implements CommandsInterface {
         return retVal;
     }
 
+    public void enableEngineerMode(int on) {}
+
     @Override
     public void testingEmergencyCall() {}
 }

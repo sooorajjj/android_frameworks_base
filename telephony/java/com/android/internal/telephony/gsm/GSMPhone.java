@@ -755,6 +755,11 @@ public class GSMPhone extends PhoneBase {
                 ringingCallState.isAlive());
     }
 
+    @Override
+    public void enableEngineerMode(int on) {
+        mCM.enableEngineerMode(on);
+    }
+
     public Connection
     dial(String dialString) throws CallStateException {
         return dial(dialString, null);

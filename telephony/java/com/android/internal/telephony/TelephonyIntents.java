@@ -55,6 +55,7 @@ public class TelephonyIntents {
      */
     public static final String ACTION_SERVICE_STATE_CHANGED = "android.intent.action.SERVICE_STATE";
 
+    public static final String ACTION_ENABLE_ENGINEER_MODE = "android.intent.action.ENABLE_ENGINEER_MODE";
     /**
      * <p>Broadcast Action: The radio technology has changed. The intent will have the following
      * extra values:</p>

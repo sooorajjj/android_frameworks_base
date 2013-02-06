@@ -1322,4 +1322,7 @@ public abstract class PhoneBase extends Handler implements Phone {
                 + this);
     }
 
+    public void enableEngineerMode(int on) {
+        Log.e(LOG_TAG, "enableEngineerMode() is not impl.");
+    }
 }

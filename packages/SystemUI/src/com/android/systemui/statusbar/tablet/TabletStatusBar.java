@@ -423,9 +423,9 @@ public class TabletStatusBar extends BaseStatusBar implements
         super.start(); // will add the main bar view
 
         if (mHasStorageNotification) {
-            android.os.storage.StorageManager mStorageManager =
+            android.os.storage.StorageManager storageManager =
                     (android.os.storage.StorageManager) mContext.getSystemService(Context.STORAGE_SERVICE);
-            mStorageManager.registerListener(
+            storageManager.registerListener(
                     new com.android.systemui.usb.StorageNotification(mContext));
         }
     }

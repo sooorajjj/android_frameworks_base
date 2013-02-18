@@ -31,12 +31,12 @@ import java.util.Arrays;
  * {@link android.provider.Telephony.Sms.Intents#SMS_EMERGENCY_CB_RECEIVED_ACTION} intent.
  * The raw PDU is no longer sent to SMS CB applications.
  */
-class SmsCbHeader {
+public class SmsCbHeader {
 
     /**
      * Length of SMS-CB header
      */
-    static final int PDU_HEADER_LENGTH = 6;
+    public static final int PDU_HEADER_LENGTH = 6;
 
     /**
      * GSM pdu format, as defined in 3gpp TS 23.041, section 9.4.1
@@ -46,12 +46,12 @@ class SmsCbHeader {
     /**
      * UMTS pdu format, as defined in 3gpp TS 23.041, section 9.4.2
      */
-    static final int FORMAT_UMTS = 2;
+    public static final int FORMAT_UMTS = 2;
 
     /**
      * GSM pdu format, as defined in 3gpp TS 23.041, section 9.4.1.3
      */
-    static final int FORMAT_ETWS_PRIMARY = 3;
+    public static final int FORMAT_ETWS_PRIMARY = 3;
 
     /**
      * Message type value as defined in 3gpp TS 25.324, section 11.1.
@@ -66,7 +66,7 @@ class SmsCbHeader {
     /**
      * Maximum length of ETWS primary message GSM pdus
      */
-    private static final int PDU_LENGTH_ETWS = 56;
+    public static final int PDU_LENGTH_ETWS = 56;
 
     private final int geographicalScope;
 
@@ -76,13 +76,13 @@ class SmsCbHeader {
     /** The Message Identifier in 3GPP is the same as the Service Category in CDMA. */
     private final int messageIdentifier;
 
-    private final int dataCodingScheme;
+    public final int dataCodingScheme;
 
     private final int pageIndex;
 
     private final int nrOfPages;
 
-    private final int format;
+    public final int format;
 
     /** ETWS warning notification info. */
     private final SmsCbEtwsInfo mEtwsInfo;

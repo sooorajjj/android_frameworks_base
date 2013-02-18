@@ -16,9 +16,16 @@
 
 package android.telephony;
 
+import android.text.format.Time;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 
+import com.android.internal.telephony.GsmAlphabet;
+import com.android.internal.telephony.uicc.IccUtils;
+import com.android.internal.telephony.gsm.SmsCbHeader;
+
+import java.io.UnsupportedEncodingException;
 /**
  * Parcelable object containing a received cell broadcast message. There are four different types
  * of Cell Broadcast messages:
@@ -65,6 +72,28 @@ public class SmsCbMessage implements Parcelable {
 
     protected static final String LOG_TAG = "SMSCB";
 
+    private SmsCbHeader mHeader;
+
+    private long mPrimaryNotificationTimestamp;
+
+    private static final int PDU_BODY_PAGE_LENGTH = 82;
+
+    /**
+     * Languages in the 0000xxxx DCS group as defined in 3GPP TS 23.038, section 5.
+     */
+    private static final String[] LANGUAGE_CODES_GROUP_0 = {
+            "de", "en", "it", "fr", "es", "nl", "sv", "da", "pt", "fi", "no", "el", "tr", "hu",
+            "pl", null
+    };
+
+    /**
+     * Languages in the 0010xxxx DCS group as defined in 3GPP TS 23.038, section 5.
+     */
+    private static final String[] LANGUAGE_CODES_GROUP_2 = {
+            "cs", "he", "ar", "ru", "is", null, null, null, null, null, null, null, null, null,
+            null, null
+    };
+    private static final char CARRIAGE_RETURN = 0x0d;
     /** Cell wide geographical scope with immediate display (GSM/UMTS only). */
     public static final int GEOGRAPHICAL_SCOPE_CELL_WIDE_IMMEDIATE = 0;
 
@@ -96,17 +125,17 @@ public class SmsCbMessage implements Parcelable {
     public static final int MESSAGE_PRIORITY_EMERGENCY = 3;
 
     /** Format of this message (for interpretation of service category values). */
-    private final int mMessageFormat;
+    private int mMessageFormat;
 
     /** Geographical scope of broadcast. */
-    private final int mGeographicalScope;
+    private int mGeographicalScope;
 
     /**
      * Serial number of broadcast (message identifier for CDMA, geographical scope + message code +
      * update number for GSM/UMTS). The serial number plus the location code uniquely identify
      * a cell broadcast for duplicate detection.
      */
-    private final int mSerialNumber;
+    private int mSerialNumber;
 
     /**
      * Location identifier for this message. It consists of the current operator MCC/MNC as a
@@ -114,30 +143,170 @@ public class SmsCbMessage implements Parcelable {
      * message is not binary 01, the Location Area is included for comparison. If the GS is
      * 00 or 11, the Cell ID is also included. LAC and Cell ID are -1 if not specified.
      */
-    private final SmsCbLocation mLocation;
+    private SmsCbLocation mLocation;
 
     /**
      * 16-bit CDMA service category or GSM/UMTS message identifier. For ETWS and CMAS warnings,
      * the information provided by the category is also available via {@link #getEtwsWarningInfo()}
      * or {@link #getCmasWarningInfo()}.
      */
-    private final int mServiceCategory;
+    private int mServiceCategory;
 
     /** Message language, as a two-character string, e.g. "en". */
-    private final String mLanguage;
+    private String mLanguage;
 
     /** Message body, as a String. */
-    private final String mBody;
+    private String mBody;
 
     /** Message priority (including emergency priority). */
-    private final int mPriority;
+    private int mPriority;
 
     /** ETWS warning notification information (ETWS warnings only). */
-    private final SmsCbEtwsInfo mEtwsWarningInfo;
+    private SmsCbEtwsInfo mEtwsWarningInfo;
 
     /** CMAS warning notification information (CMAS warnings only). */
-    private final SmsCbCmasInfo mCmasWarningInfo;
+    private SmsCbCmasInfo mCmasWarningInfo;
 
+    /**
+     * Create an instance of this class from a received PDU
+     *
+     * @param pdu PDU bytes
+     * @return An instance of this class, or null if invalid pdu
+     */
+    public static SmsCbMessage createFromPdu(byte[] pdu) {
+        try {
+            return new SmsCbMessage(pdu);
+        } catch (IllegalArgumentException e) {
+            Log.w(LOG_TAG, "Failed parsing SMS-CB pdu", e);
+            return null;
+        }
+    }
+
+    /** 43 byte digital signature of ETWS primary notification with security. */
+    private byte[] mPrimaryNotificationDigitalSignature;
+
+    private SmsCbMessage(byte[] pdu) throws IllegalArgumentException {
+        mHeader = new SmsCbHeader(pdu);
+        if (mHeader.format == SmsCbHeader.FORMAT_ETWS_PRIMARY) {
+            mBody = "ETWS";
+            // ETWS primary notification with security is 56 octets in length
+            if (pdu.length >= SmsCbHeader.PDU_LENGTH_ETWS) {
+                mPrimaryNotificationTimestamp = getTimestampMillis(pdu);
+                mPrimaryNotificationDigitalSignature = new byte[43];
+                // digital signature starts after 6 byte header and 7 byte timestamp
+                System.arraycopy(pdu, 13, mPrimaryNotificationDigitalSignature, 0, 43);
+            }
+        } else {
+            parseBody(pdu);
+        }
+    }
+
+    private void parseBody(byte[] pdu) {
+        int encoding;
+        boolean hasLanguageIndicator = false;
+
+        // Extract encoding and language from DCS, as defined in 3gpp TS 23.038,
+        // section 5.
+        switch ((mHeader.dataCodingScheme & 0xf0) >> 4) {
+            case 0x00:
+                encoding = SmsMessage.ENCODING_7BIT;
+                mLanguage = LANGUAGE_CODES_GROUP_0[mHeader.dataCodingScheme & 0x0f];
+                break;
+
+            case 0x01:
+                hasLanguageIndicator = true;
+                if ((mHeader.dataCodingScheme & 0x0f) == 0x01) {
+                    encoding = SmsMessage.ENCODING_16BIT;
+                } else {
+                    encoding = SmsMessage.ENCODING_7BIT;
+                }
+                break;
+
+            case 0x02:
+                encoding = SmsMessage.ENCODING_7BIT;
+                mLanguage = LANGUAGE_CODES_GROUP_2[mHeader.dataCodingScheme & 0x0f];
+                break;
+
+            case 0x03:
+                encoding = SmsMessage.ENCODING_7BIT;
+                break;
+
+            case 0x04:
+            case 0x05:
+                switch ((mHeader.dataCodingScheme & 0x0c) >> 2) {
+                    case 0x01:
+                        encoding = SmsMessage.ENCODING_8BIT;
+                        break;
+
+                    case 0x02:
+                        encoding = SmsMessage.ENCODING_16BIT;
+                        break;
+
+                    case 0x00:
+                    default:
+                        encoding = SmsMessage.ENCODING_7BIT;
+                        break;
+                }
+                break;
+
+            case 0x06:
+            case 0x07:
+                // Compression not supported
+            case 0x09:
+                // UDH structure not supported
+            case 0x0e:
+                // Defined by the WAP forum not supported
+                encoding = SmsMessage.ENCODING_UNKNOWN;
+                break;
+
+            case 0x0f:
+                if (((mHeader.dataCodingScheme & 0x04) >> 2) == 0x01) {
+                    encoding = SmsMessage.ENCODING_8BIT;
+                } else {
+                    encoding = SmsMessage.ENCODING_7BIT;
+                }
+                break;
+
+            default:
+                // Reserved values are to be treated as 7-bit
+                encoding = SmsMessage.ENCODING_7BIT;
+                break;
+        }
+
+        if (mHeader.format == SmsCbHeader.FORMAT_UMTS) {
+            // Payload may contain multiple pages
+            int nrPages = pdu[SmsCbHeader.PDU_HEADER_LENGTH];
+
+            if (pdu.length < SmsCbHeader.PDU_HEADER_LENGTH + 1 + (PDU_BODY_PAGE_LENGTH + 1)
+                    * nrPages) {
+                throw new IllegalArgumentException("Pdu length " + pdu.length + " does not match "
+                        + nrPages + " pages");
+            }
+
+            StringBuilder sb = new StringBuilder();
+
+            for (int i = 0; i < nrPages; i++) {
+                // Each page is 82 bytes followed by a length octet indicating
+                // the number of useful octets within those 82
+                int offset = SmsCbHeader.PDU_HEADER_LENGTH + 1 + (PDU_BODY_PAGE_LENGTH + 1) * i;
+                int length = pdu[offset + PDU_BODY_PAGE_LENGTH];
+
+                if (length > PDU_BODY_PAGE_LENGTH) {
+                    throw new IllegalArgumentException("Page length " + length
+                            + " exceeds maximum value " + PDU_BODY_PAGE_LENGTH);
+                }
+
+                sb.append(unpackBody(pdu, encoding, offset, length, hasLanguageIndicator));
+            }
+            mBody = sb.toString();
+        } else {
+            // Payload is one single page
+            int offset = SmsCbHeader.PDU_HEADER_LENGTH;
+            int length = pdu.length - offset;
+
+            mBody = unpackBody(pdu, encoding, offset, length, hasLanguageIndicator);
+        }
+    }
     /**
      * Create a new SmsCbMessage with the specified data.
      */
@@ -379,4 +548,111 @@ public class SmsCbMessage implements Parcelable {
     public int describeContents() {
         return 0;
     }
+
+        /**
+     * Unpack body text from the pdu using the given encoding, position and
+     * length within the pdu
+     *
+     * @param pdu The pdu
+     * @param encoding The encoding, as derived from the DCS
+     * @param offset Position of the first byte to unpack
+     * @param length Number of bytes to unpack
+     * @param hasLanguageIndicator true if the body text is preceded by a
+     *            language indicator. If so, this method will as a side-effect
+     *            assign the extracted language code into mLanguage
+     * @return Body text
+     */
+    private String unpackBody(byte[] pdu, int encoding, int offset, int length,
+            boolean hasLanguageIndicator) {
+        String body = null;
+
+        switch (encoding) {
+            case SmsMessage.ENCODING_7BIT:
+                body = GsmAlphabet.gsm7BitPackedToString(pdu, offset, length * 8 / 7);
+
+                if (hasLanguageIndicator && body != null && body.length() > 2) {
+                    // Language is two GSM characters followed by a CR.
+                    // The actual body text is offset by 3 characters.
+                    mLanguage = body.substring(0, 2);
+                    body = body.substring(3);
+                }
+                break;
+
+            case SmsMessage.ENCODING_16BIT:
+                if (hasLanguageIndicator && pdu.length >= offset + 2) {
+                    // Language is two GSM characters.
+                    // The actual body text is offset by 2 bytes.
+                    mLanguage = GsmAlphabet.gsm7BitPackedToString(pdu, offset, 2);
+                    offset += 2;
+                    length -= 2;
+                }
+
+                try {
+                    body = new String(pdu, offset, (length & 0xfffe), "utf-16");
+                } catch (UnsupportedEncodingException e) {
+                    // Eeeek
+                }
+                break;
+
+            default:
+                break;
+        }
+
+        if (body != null) {
+            // Remove trailing carriage return
+            for (int i = body.length() - 1; i >= 0; i--) {
+                if (body.charAt(i) != CARRIAGE_RETURN) {
+                    body = body.substring(0, i + 1);
+                    break;
+                }
+            }
+        } else {
+            body = "";
+        }
+
+        return body;
+    }
+
+    /**
+     * Append text to the message body. This is used to concatenate multi-page GSM broadcasts.
+     * @param body the text to append to this message
+     */
+    public void appendToBody(String body) {
+        mBody = mBody + body;
+    }
+    private long getTimestampMillis(byte[] pdu) {
+        // Timestamp starts after CB header, in pdu[6]
+        int year = IccUtils.gsmBcdByteToInt(pdu[6]);
+        int month = IccUtils.gsmBcdByteToInt(pdu[7]);
+        int day = IccUtils.gsmBcdByteToInt(pdu[8]);
+        int hour = IccUtils.gsmBcdByteToInt(pdu[9]);
+        int minute = IccUtils.gsmBcdByteToInt(pdu[10]);
+        int second = IccUtils.gsmBcdByteToInt(pdu[11]);
+
+        // For the timezone, the most significant bit of the
+        // least significant nibble is the sign byte
+        // (meaning the max range of this field is 79 quarter-hours,
+        // which is more than enough)
+
+        byte tzByte = pdu[12];
+
+        // Mask out sign bit.
+        int timezoneOffset = IccUtils.gsmBcdByteToInt((byte) (tzByte & (~0x08)));
+
+        timezoneOffset = ((tzByte & 0x08) == 0) ? timezoneOffset : -timezoneOffset;
+
+        Time time = new Time(Time.TIMEZONE_UTC);
+
+        // It's 2006.  Should I really support years < 2000?
+        time.year = year >= 90 ? year + 1900 : year + 2000;
+        time.month = month - 1;
+        time.monthDay = day;
+        time.hour = hour;
+        time.minute = minute;
+        time.second = second;
+
+        // Timezone offset is in quarter hours.
+        return time.toMillis(true) - (timezoneOffset * 15 * 60 * 1000);
+    }
+
 }

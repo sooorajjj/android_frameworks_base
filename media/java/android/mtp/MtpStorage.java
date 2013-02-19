@@ -27,6 +27,11 @@ import android.os.storage.StorageVolume;
  * @hide
  */
 public class MtpStorage {
+    /*
+     * Broadcast Action: A broadcast for MTP Storage state change event.
+     * This intent is sent when MTP Storage is changed by adding or deleting media.
+     */
+    public static final String ACTION_MTP_STORAGE_STATE = "android.mtp.action.MTP_STORAGE_STATE";
 
     private final int mStorageId;
     private final String mPath;

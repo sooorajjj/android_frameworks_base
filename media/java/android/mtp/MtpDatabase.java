@@ -332,6 +332,7 @@ public class MtpDatabase {
             } else {
                 mMediaScanner.scanMtpFile(path, mVolumeName, handle, format);
             }
+            mContext.sendBroadcast(new Intent(MtpStorage.ACTION_MTP_STORAGE_STATE));
         } else {
             deleteFile(handle);
         }
@@ -962,6 +963,11 @@ public class MtpDatabase {
                 c.close();
             }
         }
+    }
+
+    private void SendMtpStorageState() {
+        Log.e(TAG, "SendMtpStorageState");
+        mContext.sendBroadcast(new Intent(MtpStorage.ACTION_MTP_STORAGE_STATE));
     }
 
     private int[] getObjectReferences(int handle) {

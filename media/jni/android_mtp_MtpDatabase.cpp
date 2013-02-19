@@ -58,6 +58,7 @@ static jmethodID method_getObjectPropertyList;
 static jmethodID method_getObjectInfo;
 static jmethodID method_getObjectFilePath;
 static jmethodID method_deleteFile;
+static jmethodID method_SendMtpStorageState;
 static jmethodID method_getObjectReferences;
 static jmethodID method_setObjectReferences;
 static jmethodID method_sessionStarted;
@@ -151,6 +152,8 @@ public:
                                             int64_t& outFileLength,
                                             MtpObjectFormat& outFormat);
     virtual MtpResponseCode         deleteFile(MtpObjectHandle handle);
+
+    virtual void                    SendMtpStorageState();
 
     bool                            getObjectPropertyInfo(MtpObjectProperty property, int& type);
     bool                            getDevicePropertyInfo(MtpDeviceProperty property, int& type);
@@ -875,6 +878,13 @@ MtpResponseCode MyMtpDatabase::deleteFile(MtpObjectHandle handle) {
     return result;
 }
 
+void MyMtpDatabase::SendMtpStorageState() {
+    JNIEnv* env = AndroidRuntime::getJNIEnv();
+    env->CallIntMethod(mDatabase, method_SendMtpStorageState);
+
+    checkAndClearExceptionFromCallback(env, __FUNCTION__);
+}
+
 struct PropertyTableEntry {
     MtpObjectProperty   property;
     int                 type;
@@ -1192,6 +1202,13 @@ int register_android_mtp_MtpDatabase(JNIEnv *env)
         ALOGE("Can't find deleteFile");
         return -1;
     }
+
+    method_SendMtpStorageState = env->GetMethodID(clazz, "SendMtpStorageState", "()V");
+    if(method_SendMtpStorageState == NULL) {
+        ALOGE("Can't find SendMtpStorageState");
+        return -1;
+    }
+
     method_getObjectReferences = env->GetMethodID(clazz, "getObjectReferences", "(I)[I");
     if (method_getObjectReferences == NULL) {
         ALOGE("Can't find getObjectReferences");

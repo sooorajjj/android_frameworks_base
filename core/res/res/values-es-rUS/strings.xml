@@ -64,12 +64,12 @@
     <string name="ThreeWCMmi" msgid="9051047170321190368">"Llamada de tres direcciones"</string>
     <string name="RuacMmi" msgid="7827887459138308886">"Rechazo de llamadas molestas no deseadas"</string>
     <string name="CndMmi" msgid="3116446237081575808">"Entrega de número de llamada"</string>
-    <string name="DndMmi" msgid="1265478932418334331">"No molestar"</string>
+    <string name="DndMmi" msgid="1265478932418334331">"No perturbe"</string>
     <string name="CLIRDefaultOnNextCallOn" msgid="429415409145781923">"El identificador de llamadas está predeterminado en restringido. Llamada siguiente: restringida"</string>
     <string name="CLIRDefaultOnNextCallOff" msgid="3092918006077864624">"El Identificador de llamadas está predeterminado en restringido. Llamada siguiente: no restringido"</string>
     <string name="CLIRDefaultOffNextCallOn" msgid="6179425182856418465">"El identificador de llamadas está predeterminado en no restringido. Llamada siguiente: restringida"</string>
     <string name="CLIRDefaultOffNextCallOff" msgid="2567998633124408552">"El Identificador de llamadas está predeterminado en no restringido. Llamada siguiente: no restringido"</string>
-    <string name="serviceNotProvisioned" msgid="8614830180508686666">"Servicio no suministrado."</string>
+    <string name="serviceNotProvisioned" msgid="8614830180508686666">"Servicio no provisionado."</string>
     <string name="CLIRPermanent" msgid="3377371145926835671">"No puedes cambiar la configuración del identificador de llamadas."</string>
     <string name="RestrictedChangedTitle" msgid="5592189398956187498">"Se ha cambiado el acceso restringido"</string>
     <string name="RestrictedOnData" msgid="8653794784690065540">"El servicio de datos está bloqueado."</string>
@@ -118,7 +118,7 @@
     <string name="httpErrorConnect" msgid="8714273236364640549">"No se pudo establecer conexión con el servidor."</string>
     <string name="httpErrorIO" msgid="2340558197489302188">"No se pudo establecer comunicación con el servidor. Inténtalo de nuevo más tarde."</string>
     <string name="httpErrorTimeout" msgid="4743403703762883954">"Se ha agotado el tiempo de espera para la conexión al servidor."</string>
-    <string name="httpErrorRedirectLoop" msgid="8679596090392779516">"La página contiene demasiados redireccionamientos de servidor."</string>
+    <string name="httpErrorRedirectLoop" msgid="8679596090392779516">"La página contiene demasiados re direccionamientos de servidor."</string>
     <string name="httpErrorUnsupportedScheme" msgid="5015730812906192208">"No se admite el protocolo."</string>
     <string name="httpErrorFailedSslHandshake" msgid="96549606000658641">"No se ha podido establecer una conexión segura."</string>
     <string name="httpErrorBadUrl" msgid="3636929722728881972">"No se pudo abrir la página porque la URL no es válida."</string>
@@ -166,7 +166,7 @@
     <string name="permgrouplab_costMoney" msgid="5429808217861460401">"Servicios que te cuestan dinero"</string>
     <string name="permgroupdesc_costMoney" msgid="3293301903409869495">"Permite que las aplicaciones realicen actividades con cargo."</string>
     <string name="permgrouplab_messages" msgid="7521249148445456662">"Tus mensajes"</string>
-    <string name="permgroupdesc_messages" msgid="7821999071003699236">"Lee y escribe tus SMS, mensajes de correo y otros mensajes."</string>
+    <string name="permgroupdesc_messages" msgid="7821999071003699236">"Lee y escribe tus SMS, mensajes de correo electrónico y otros mensajes."</string>
     <string name="permgrouplab_personalInfo" msgid="3519163141070533474">"Tu información personal"</string>
     <string name="permgroupdesc_personalInfo" product="tablet" msgid="6975389054186265786">"Acceso directo a los contactos y calendario guardados en tu dispositivo."</string>
     <string name="permgroupdesc_personalInfo" product="default" msgid="5488050357388806068">"Acceso directo a tus contactos y calendario guardado en el dispositivo."</string>
@@ -193,7 +193,7 @@
     <string name="permdesc_statusBarService" msgid="716113660795976060">"Permite que la aplicación sea la barra de estado."</string>
     <string name="permlab_expandStatusBar" msgid="1148198785937489264">"expandir o reducir la barra de estado"</string>
     <string name="permdesc_expandStatusBar" msgid="6917549437129401132">"Permite que la aplicación muestre y oculte la barra de estado."</string>
-    <string name="permlab_processOutgoingCalls" msgid="3906007831192990946">"redireccionar llamadas salientes"</string>
+    <string name="permlab_processOutgoingCalls" msgid="3906007831192990946">"reorientar llamadas salientes"</string>
     <string name="permdesc_processOutgoingCalls" msgid="5331318931937402040">"Permite que la aplicación procese las llamadas salientes y cambie el número que se va a marcar. La aplicación puede utilizar este permiso para controlar o desviar llamadas salientes o para impedir que se realicen."</string>
     <string name="permlab_receiveSms" msgid="8673471768947895082">"recibir mensajes de texto (SMS)"</string>
     <string name="permdesc_receiveSms" msgid="6424387754228766939">"Permite que la aplicación reciba y procese mensajes SMS, lo que significa que podría controlar o eliminar mensajes enviados al dispositivo sin mostrártelos."</string>
@@ -282,7 +282,7 @@
     <string name="permdesc_bindInputMethod" msgid="3250440322807286331">"Permite al propietario vincularse a la interfaz de nivel superior de un método de entrada. Las aplicaciones normales no deberían necesitar este permiso."</string>
     <string name="permlab_bindAccessibilityService" msgid="5357733942556031593">"vincular a un servicio de accesibilidad"</string>
     <string name="permdesc_bindAccessibilityService" msgid="7034615928609331368">"Permite al propietario vincularse a la interfaz de nivel superior de un servicio de accesibilidad. Las aplicaciones normales no deberían necesitar este permiso."</string>
-    <string name="permlab_bindTextService" msgid="7358378401915287938">"vincular a un servicio de texto"</string>
+    <string name="permlab_bindTextService" msgid="7358378401915287938">"vincular a un servicio de SMS"</string>
     <string name="permdesc_bindTextService" msgid="8151968910973998670">"Permite al titular vincularse a la interfaz de nivel superior de un servicio de texto (p. ej., SpellCheckerService). Las aplicaciones normales no deberían necesitar este permiso."</string>
     <string name="permlab_bindVpnService" msgid="4708596021161473255">"vincular con un servicio de VPN"</string>
     <string name="permdesc_bindVpnService" msgid="2067845564581693905">"Permite al titular vincularse a la interfaz de nivel superior de un servicio de VPN. Las aplicaciones normales no deberían necesitar este permiso."</string>
@@ -329,7 +329,7 @@
     <string name="permdesc_changeComponentState" product="tablet" msgid="8887435740982237294">"Permite que la aplicación determine si un componente de otra aplicación está habilitado o no. Las aplicaciones maliciosas pueden utilizar este permiso para desactivar funciones importantes de la tableta. Es necesario ser precavido con este permiso, ya que es posible que los componentes de la aplicación queden inservibles, incoherentes o inestables."</string>
     <string name="permdesc_changeComponentState" product="default" msgid="1827232484416505615">"Permite que la aplicación determine si un componente de otra aplicación está habilitado o no. Las aplicaciones maliciosas pueden utilizar este permiso para desactivar funciones importantes del dispositivo. Es necesario ser precavido con este permiso, ya que es posible que los componentes de la aplicación queden inservibles, incoherentes o inestables."</string>
     <string name="permlab_grantRevokePermissions" msgid="4627315351093508795">"Otorgar o revocar permisos"</string>
-    <string name="permdesc_grantRevokePermissions" msgid="4088642654085850662">"Permite a una aplicación otorgar permisos específicos a otras aplicaciones, autoconcedérselos o revocarlos. Las aplicaciones maliciosas pueden así acceder a funciones para las que no les otorgaste permiso."</string>
+    <string name="permdesc_grantRevokePermissions" msgid="4088642654085850662">"Permite a una aplicación otorgar permisos específicos a otras aplicaciones, auto concedérselos o revocarlos. Las aplicaciones maliciosas pueden así acceder a funciones para las que no les otorgaste permiso."</string>
     <string name="permlab_setPreferredApplications" msgid="8463181628695396391">"establecer aplicaciones preferidas"</string>
     <string name="permdesc_setPreferredApplications" msgid="4973986762241783712">"Permite que la aplicación modifique tus aplicaciones preferidas. Las aplicaciones maliciosas pueden modificar sin aviso las aplicaciones que se ejecutan y así engañar a tus aplicaciones existentes para que recopilen tu información privada."</string>
     <string name="permlab_writeSettings" msgid="2226195290955224730">"modificar la configuración del sistema"</string>
@@ -341,7 +341,7 @@
     <string name="permlab_receiveBootCompleted" msgid="5312965565987800025">"ejecutarse al inicio"</string>
     <string name="permdesc_receiveBootCompleted" product="tablet" msgid="7390304664116880704">"Permite que la aplicación se inicie en cuanto el sistema haya finalizado la inicialización. Esto puede ocasionar que la tableta tarde más en inicializarse y que la aplicación ralentice el funcionamiento general de la tableta al estar en ejecución constante."</string>
     <string name="permdesc_receiveBootCompleted" product="default" msgid="513950589102617504">"Permite que la aplicación se inicie en cuanto el sistema haya finalizado la inicialización. Esto puede ocasionar que el dispositivo tarde más en inicializarse y que la aplicación ralentice el funcionamiento general del dispositivo al estar en ejecución constante."</string>
-    <string name="permlab_broadcastSticky" msgid="7919126372606881614">"enviar emisiones pegajosas"</string>
+    <string name="permlab_broadcastSticky" msgid="7919126372606881614">"enviar transmissión persistente"</string>
     <string name="permdesc_broadcastSticky" product="tablet" msgid="7749760494399915651">"Permite que la aplicación envíe transmisiones persistentes que permanecen después de que finaliza la transmisión. Un uso excesivo podría ralentizar la tableta o hacer que funcione de manera inestable al forzarla a utilizar mucha memoria."</string>
     <string name="permdesc_broadcastSticky" product="default" msgid="2825803764232445091">"Permite que la aplicación envíe transmisiones persistentes que permanecen después de que finaliza la transmisión. Un uso excesivo podría ralentizar el dispositivo o hacer que funcione de manera inestable al forzarlo a utilizar mucha memoria."</string>
     <string name="permlab_readContacts" msgid="8348481131899886131">"leer tus contactos"</string>
@@ -358,7 +358,7 @@
     <string name="permdesc_writeCallLog" product="default" msgid="683941736352787842">"Permite que la aplicación modifique el registro de llamadas del dispositivo, incluidos los datos sobre llamadas entrantes y salientes. Las aplicaciones malintencionadas pueden usar este permiso para borrar o modificar el registro de llamadas."</string>
     <string name="permlab_readProfile" msgid="4701889852612716678">"leer tarjeta contacto propia"</string>
     <string name="permdesc_readProfile" product="default" msgid="5462475151849888848">"Permite que la aplicación consulte la información del perfil personal almacenada en el dispositivo, como el nombre o la información de contacto, lo que significa que la aplicación puede identificar al usuario y enviar la información de su perfil a otros usuarios."</string>
-    <string name="permlab_writeProfile" msgid="907793628777397643">"modif. tarjeta contacto propia"</string>
+    <string name="permlab_writeProfile" msgid="907793628777397643">"Modificar su propia tarjeta de contacto"</string>
     <string name="permdesc_writeProfile" product="default" msgid="5552084294598465899">"Permite que la aplicación modifique la información del perfil personal almacenada en el dispositivo, como el nombre o la información de contacto, o que agregue contenido a esa información. Esto significa que puede identificarte y enviar la información de tu perfil a otros usuarios."</string>
     <string name="permlab_readSocialStream" product="default" msgid="1268920956152419170">"Lectura de tu muro social"</string>
     <string name="permdesc_readSocialStream" product="default" msgid="4255706027172050872">"Permite que la aplicación acceda a las actualizaciones de tus redes sociales y las de tus amigos, y que las sincronice. Ten cuidado al compartir información, ya que la aplicación puede utilizar este permiso para leer las conversaciones que tengas con tus amigos en las redes sociales sin tener en cuenta si son confidenciales. Nota: Este permiso no se puede utilizar en todas las redes sociales."</string>
@@ -383,7 +383,7 @@
     <string name="permdesc_accessCoarseLocation" msgid="5383798877137640762">"Permite acceder a la ubicación aproximada a través de proveedores de ubicación que utilizan fuentes de conexión como torres de telefonía móvil y redes Wi-Fi. Cuando estos servicios de ubicación están disponibles y activados, este permiso permite que la aplicación determine tu ubicación aproximada."</string>
     <string name="permlab_accessSurfaceFlinger" msgid="2363969641792388947">"acceder a SurfaceFlinger"</string>
     <string name="permdesc_accessSurfaceFlinger" msgid="1041619516733293551">"Permite que la aplicación utilice funciones de SurfaceFlinger de bajo nivel."</string>
-    <string name="permlab_readFrameBuffer" msgid="6690504248178498136">"leer el búfer de tramas"</string>
+    <string name="permlab_readFrameBuffer" msgid="6690504248178498136">"leer el búfer de tablas"</string>
     <string name="permdesc_readFrameBuffer" msgid="4937405521809454680">"Permite que la aplicación lea el contenido del búfer de tramas."</string>
     <string name="permlab_modifyAudioSettings" msgid="6095859937069146086">"cambiar tu configuración de audio"</string>
     <string name="permdesc_modifyAudioSettings" msgid="3522565366806248517">"Permite que la aplicación modifique la configuración de audio global, por ejemplo, el volumen y el altavoz de salida."</string>
@@ -471,7 +471,7 @@
     <string name="permdesc_getAccounts" product="tablet" msgid="2741496534769660027">"Permite que la aplicación obtenga una lista de las cuentas reconocidas por la tableta, entre las que se pueden incluir las cuentas creadas por las aplicaciones que hayas instalado."</string>
     <string name="permdesc_getAccounts" product="default" msgid="3448316822451807382">"Permite que la aplicación obtenga una lista de las cuentas reconocidas por el dispositivo, entre las que se pueden incluir las cuentas creadas por las aplicaciones que hayas instalado."</string>
     <string name="permlab_authenticateAccounts" msgid="5265908481172736933">"crear cuentas y establecer contraseñas"</string>
-    <string name="permdesc_authenticateAccounts" msgid="5472124296908977260">"Permite que la aplicación utilice las capacidades del autenticador de cuentas del administrador de cuentas, incluida la creación de cuentas y la obtención y configuración de sus contraseñas."</string>
+    <string name="permdesc_authenticateAccounts" msgid="5472124296908977260">"Permite que la aplicación utilice las capacidades del autenticado de cuentas del administrador de cuentas, incluida la creación de cuentas y la obtención y configuración de sus contraseñas."</string>
     <string name="permlab_manageAccounts" msgid="4983126304757177305">"agregar o eliminar cuentas"</string>
     <string name="permdesc_manageAccounts" msgid="8698295625488292506">"Permite que la aplicación ejecute operaciones, como agregar y eliminar cuentas, y eliminar sus contraseñas."</string>
     <string name="permlab_useCredentials" msgid="235481396163877642">"utilizar las cuentas del dispositivo"</string>
@@ -481,7 +481,7 @@
     <string name="permlab_createNetworkSockets" msgid="8018758136404323658">"acceso completo a la red"</string>
     <string name="permdesc_createNetworkSockets" msgid="3403062187779724185">"Permite que la aplicación cree sockets de red y utilice protocolos de red personalizados. El navegador y otras aplicaciones proporcionan los medios necesarios para el envío de datos a Internet, por lo que no hace falta utilizar este permiso para eso."</string>
     <string name="permlab_writeApnSettings" msgid="505660159675751896">"Cambiar/interceptar el tráfico y la configuración de red"</string>
-    <string name="permdesc_writeApnSettings" msgid="5333798886412714193">"Permite que la aplicación cambie la configuración de red e intercepte e inspeccione todo el tráfico de red; por ejemplo, para cambiar el proxy y el puerto de cualquier APN. Las aplicaciones maliciosas pueden controlar, redireccionar o modificar paquetes de red sin que tú lo sepas."</string>
+    <string name="permdesc_writeApnSettings" msgid="5333798886412714193">"Permite que la aplicación cambie la configuración de red e intercepte e inspeccione todo el tráfico de red; por ejemplo, para cambiar el proxy y el puerto de cualquier APN. Las aplicaciones maliciosas pueden controlar, re direccionar o modificar paquetes de red sin que tú lo sepas."</string>
     <string name="permlab_changeNetworkState" msgid="958884291454327309">"cambiar la conectividad de la red"</string>
     <string name="permdesc_changeNetworkState" msgid="6789123912476416214">"Permite que la aplicación cambie el estado de la conectividad de red."</string>
     <string name="permlab_changeTetherState" msgid="5952584964373017960">"cambiar la conectividad de anclaje a red"</string>
@@ -624,7 +624,7 @@
     <string name="phoneTypeRadio" msgid="4093738079908667513">"Radio"</string>
     <string name="phoneTypeTelex" msgid="3367879952476250512">"Télex"</string>
     <string name="phoneTypeTtyTdd" msgid="8606514378585000044">"TTY TDD"</string>
-    <string name="phoneTypeWorkMobile" msgid="1311426989184065709">"Celular del trabajo"</string>
+    <string name="phoneTypeWorkMobile" msgid="1311426989184065709">"Móvil del trabajo"</string>
     <string name="phoneTypeWorkPager" msgid="649938731231157056">"Localizador del trabajo"</string>
     <string name="phoneTypeAssistant" msgid="5596772636128562884">"Asistente"</string>
     <string name="phoneTypeMms" msgid="7254492275502768992">"MMS"</string>
@@ -757,7 +757,7 @@
     <string name="hour_ampm" msgid="4584338083529355982">"<xliff:g id="HOUR">%-l</xliff:g> <xliff:g id="AMPM">%P</xliff:g>"</string>
     <string name="hour_cap_ampm" msgid="2083465992940444366">"<xliff:g id="HOUR">%-l</xliff:g> <xliff:g id="AMPM">%p</xliff:g>"</string>
     <string name="factorytest_failed" msgid="5410270329114212041">"Error en la prueba de fábrica"</string>
-    <string name="factorytest_not_system" msgid="4435201656767276723">"La acción FACTORY_TEST se admite solamente en paquetes instalados en /system/app."</string>
+    <string name="factorytest_not_system" msgid="4435201656767276723">"La acción FACTORY_TEST se admite solamente en paquetes instalados en /sistema/app."</string>
     <string name="factorytest_no_action" msgid="872991874799998561">"No se ha encontrado ningún paquete que proporcione la acción FACTORY_TEST ."</string>
     <string name="factorytest_reboot" msgid="6320168203050791643">"Reiniciar"</string>
     <string name="js_dialog_title" msgid="1987483977834603872">"La página \"<xliff:g id="TITLE">%s</xliff:g>\" dice:"</string>
@@ -766,7 +766,7 @@
     <string name="save_password_label" msgid="6860261758665825069">"Confirmar"</string>
     <string name="double_tap_toast" msgid="4595046515400268881">"Consejo: Toca dos veces para acercar y alejar la imagen."</string>
     <string name="autofill_this_form" msgid="4616758841157816676">"Autocompletar"</string>
-    <string name="setup_autofill" msgid="7103495070180590814">"Conf. Autocompl."</string>
+    <string name="setup_autofill" msgid="7103495070180590814">"Configurar Auto complementación"</string>
     <string name="autofill_address_name_separator" msgid="6350145154779706772">" "</string>
     <string name="autofill_address_summary_name_format" msgid="3268041054899214945">"$1$2$3"</string>
     <string name="autofill_address_summary_separator" msgid="7483307893170324129">", "</string>
@@ -821,7 +821,7 @@
     <string name="searchview_description_clear" msgid="1330281990951833033">"Eliminar la consulta"</string>
     <string name="searchview_description_submit" msgid="2688450133297983542">"Enviar consulta"</string>
     <string name="searchview_description_voice" msgid="2453203695674994440">"Búsqueda por voz"</string>
-    <string name="enable_explore_by_touch_warning_title" msgid="7460694070309730149">"¿Activar exploración táctil?"</string>
+    <string name="enable_explore_by_touch_warning_title" msgid="7460694070309730149">"¿Activar exploración por toque?"</string>
     <string name="enable_explore_by_touch_warning_message" product="tablet" msgid="8655887539089910577">"<xliff:g id="ACCESSIBILITY_SERVICE_NAME">%1$s</xliff:g> desea activar la exploración táctil. Cuando esta función esté activada, podrás escuchar o ver descripciones del contenido seleccionado o usar gestos para interactuar con la tableta."</string>
     <string name="enable_explore_by_touch_warning_message" product="default" msgid="2708199672852373195">"<xliff:g id="ACCESSIBILITY_SERVICE_NAME">%1$s</xliff:g> desea activar la exploración táctil. Cuando esta función esté activada, podrás escuchar o ver descripciones del contenido seleccionado o usar gestos para interactuar con el dispositivo."</string>
     <string name="oneMonthDurationPast" msgid="7396384508953779925">"hace 1 mes"</string>
@@ -902,8 +902,8 @@
     <string name="days" msgid="4774547661021344602">"días"</string>
     <string name="hour" msgid="2126771916426189481">"hora"</string>
     <string name="hours" msgid="894424005266852993">"horas"</string>
-    <string name="minute" msgid="9148878657703769868">"min"</string>
-    <string name="minutes" msgid="5646001005827034509">"mins"</string>
+    <string name="minute" msgid="9148878657703769868">"minuto"</string>
+    <string name="minutes" msgid="5646001005827034509">"minutos"</string>
     <string name="second" msgid="3184235808021478">"segundo"</string>
     <string name="seconds" msgid="3161515347216589235">"segundos"</string>
     <string name="week" msgid="5617961537173061583">"semana"</string>
@@ -929,11 +929,11 @@
     <string name="delete" msgid="6098684844021697789">"Eliminar"</string>
     <string name="copyUrl" msgid="2538211579596067402">"Copiar URL"</string>
     <string name="selectTextMode" msgid="1018691815143165326">"Seleccionar texto"</string>
-    <string name="textSelectionCABTitle" msgid="5236850394370820357">"Selección de texto"</string>
+    <string name="textSelectionCABTitle" msgid="5236850394370820357">"Selección de SMS"</string>
     <string name="addToDictionary" msgid="9090375111134433012">"Agregar al diccionario"</string>
     <string name="deleteText" msgid="7070985395199629156">"eliminar"</string>
     <string name="inputMethod" msgid="1653630062304567879">"Método de entrada"</string>
-    <string name="editTextMenuTitle" msgid="4909135564941815494">"Acciones de texto"</string>
+    <string name="editTextMenuTitle" msgid="4909135564941815494">"Acciones de SMS"</string>
     <string name="low_internal_storage_view_title" msgid="5576272496365684834">"Queda poco espacio de almacenamiento"</string>
     <string name="low_internal_storage_view_text" msgid="6640505817617414371">"Es posible que algunas funciones del sistema no estén disponibles."</string>
     <string name="ok" msgid="5970060430562524910">"Aceptar"</string>
@@ -942,7 +942,7 @@
     <string name="no" msgid="5141531044935541497">"Cancelar"</string>
     <string name="dialog_alert_title" msgid="2049658708609043103">"Atención"</string>
     <string name="loading" msgid="7933681260296021180">"Cargando…"</string>
-    <string name="capital_on" msgid="1544682755514494298">"Sí"</string>
+    <string name="capital_on" msgid="1544682755514494298">"ON"</string>
     <string name="capital_off" msgid="6815870386972805832">"No"</string>
     <string name="whichApplication" msgid="4533185947064773386">"Completar la acción mediante"</string>
     <string name="alwaysUse" msgid="4583018368000610438">"Utilizar de manera predeterminada en esta acción."</string>
@@ -962,7 +962,7 @@
     <string name="report" msgid="4060218260984795706">"Notificar"</string>
     <string name="wait" msgid="7147118217226317732">"Esperar"</string>
     <string name="webpage_unresponsive" msgid="3272758351138122503">"La página no responde."\n\n"¿Deseas cerrarla?"</string>
-    <string name="launch_warning_title" msgid="1547997780506713581">"Aplicación redireccionada"</string>
+    <string name="launch_warning_title" msgid="1547997780506713581">"Aplicación re direccionada"</string>
     <string name="launch_warning_replace" msgid="6202498949970281412">"<xliff:g id="APP_NAME">%1$s</xliff:g> se está ejecutando ahora."</string>
     <string name="launch_warning_original" msgid="188102023021668683">"<xliff:g id="APP_NAME">%1$s</xliff:g> se inició originalmente."</string>
     <string name="screen_compat_mode_scale" msgid="3202955667675944499">"Escala"</string>
@@ -1032,7 +1032,7 @@
     <string name="sms_control_title" msgid="7296612781128917719">"Enviando mensajes SMS"</string>
     <string name="sms_control_message" msgid="3867899169651496433">"&lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; está enviando una gran cantidad de mensajes SMS. ¿Quieres permitir que está aplicación siga enviando mensajes?"</string>
     <string name="sms_control_yes" msgid="3663725993855816807">"Permitir"</string>
-    <string name="sms_control_no" msgid="625438561395534982">"Rechazar"</string>
+    <string name="sms_control_no" msgid="625438561395534982">"Negar"</string>
     <string name="sim_removed_title" msgid="6227712319223226185">"Tarjeta SIM eliminada"</string>
     <string name="sim_removed_message" msgid="2333164559970958645">"La red para celulares no estará disponible hasta que reinicies, luego de insertar una tarjeta SIM válida."</string>
     <string name="sim_done_button" msgid="827949989369963775">"Finalizado"</string>
@@ -1135,13 +1135,13 @@
     <string name="grant_credentials_permission_message_footer" msgid="3125211343379376561">"¿Deseas permitir esta solicitud?"</string>
     <string name="grant_permissions_header_text" msgid="6874497408201826708">"Solicitud de acceso"</string>
     <string name="allow" msgid="7225948811296386551">"Permitir"</string>
-    <string name="deny" msgid="2081879885755434506">"Denegar"</string>
+    <string name="deny" msgid="2081879885755434506">"Negar"</string>
     <string name="permission_request_notification_title" msgid="6486759795926237907">"Permiso solicitado"</string>
     <string name="permission_request_notification_with_subtitle" msgid="8530393139639560189">"Permiso solicitado"\n"para la cuenta <xliff:g id="ACCOUNT">%s</xliff:g>"</string>
     <string name="input_method_binding_label" msgid="1283557179944992649">"Método de entrada"</string>
     <string name="sync_binding_label" msgid="3687969138375092423">"Sincronización"</string>
     <string name="accessibility_binding_label" msgid="4148120742096474641">"Accesibilidad"</string>
-    <string name="wallpaper_binding_label" msgid="1240087844304687662">"Papel tapiz"</string>
+    <string name="wallpaper_binding_label" msgid="1240087844304687662">"Papel de pared"</string>
     <string name="chooser_wallpaper" msgid="7873476199295190279">"Cambiar fondo de pantalla"</string>
     <string name="vpn_title" msgid="19615213552042827">"VPN activada"</string>
     <string name="vpn_title_long" msgid="6400714798049252294">"VPN está activado por <xliff:g id="APP">%s</xliff:g>"</string>
@@ -1257,7 +1257,7 @@
     <string name="data_usage_wifi_limit_snoozed_title" msgid="8743856006384825974">"Límite de datos Wi-Fi superado"</string>
     <string name="data_usage_limit_snoozed_body" msgid="7035490278298441767">"Límite superado en <xliff:g id="SIZE">%s</xliff:g>"</string>
     <string name="data_usage_restricted_title" msgid="5965157361036321914">"Datos de referencia restringidos"</string>
-    <string name="data_usage_restricted_body" msgid="6741521330997452990">"Toca para eliminar la restricc."</string>
+    <string name="data_usage_restricted_body" msgid="6741521330997452990">"Toca para eliminar la restricción."</string>
     <string name="ssl_certificate" msgid="6510040486049237639">"Certificado de seguridad"</string>
     <string name="ssl_certificate_is_valid" msgid="6825263250774569373">"Este certificado es válido."</string>
     <string name="issued_to" msgid="454239480274921032">"Emitido a:"</string>
@@ -1290,4 +1290,73 @@
     <string name="default_audio_route_category_name" msgid="3722811174003886946">"Sistema"</string>
     <string name="bluetooth_a2dp_audio_route_name" msgid="8575624030406771015">"Audio Bluetooth"</string>
     <string name="media_route_chooser_grouping_done" msgid="7966438307723317169">"Listo"</string>
+    <string name="managed_roaming_dialog_ok_button" >Si</string>
+    <string name="autofill_address_type_use_my_re" >iniciar directamente la configuración CDMA del dispositivo</string>
+    <string name="locale_replacement" ></string>
+    <string name="autofill_address_line_1_label_re" >address<!-- fr-FR -->|adresse<!-- it-IT -->|indirizzo<!-- ja-JP -->|住所<!-- zh-CN -->|地址</string>
+    <string name="managed_roaming_dialog_cancel_button" >No</string>
+    <string name="stkCcSsToSs" ><xliff:g id="bearer_service_code">{0}</xliff:g>: <xliff:g id="dialing_number">{1}</xliff:g></string>
+    <string name="autofill_country_re" >country|location<!-- ja-JP -->|国<!-- zh-CN -->|国家</string>
+    <string name="stkCcUssdToUssd" >requición USSD modificada para nueva requisición USSD</string>
+    <string name="autofill_zip_4_re" >zip|^-$|post2<!-- pt-BR, pt-PT -->|codpos2</string>
+    <string name="keyguard_password_puk_failed" >Operación PUK falló</string>
+    <string name="autofill_billing_designator_re" >cuenta</string>
+    <string name="managed_roaming_dialog_content" >Red con servicio limitado. Gustaría buscar otra red?</string>
+    <string name="autofill_region_ignored_re" >province|region|other<!-- es -->|provincia<!-- pt-BR, pt-PT -->|bairro|suburb</string>
+    <string name="lockscreen_sim_error_message" >Tarjeta SIM invalida</string>
+    <string name="autofill_shipping_designator_re" >enviar</string>
+    <string name="autofill_area_code_re" >area.*code|acode|area</string>
+    <string name="autofill_zip_code_re" >zip|postal|post code|pcode|^1z$<!-- de-DE -->|postleitzahl<!-- es -->|cp<!-- fr-FR -->|cdp<!-- it-IT -->|cap<!-- ja-JP -->|郵便番号<!-- pt-BR, pt-PT -->|codigo|codpos|cep<!-- ru -->|Почтовый.?Индекс<!--zh-CN -->|邮政编码|邮编<!-- zh-TW -->|郵遞區號</string>
+    <string name="autofill_name_on_card_contextual_re" >nombre</string>
+    <string name="autofill_name_re" >^name|full.?name|your.?name|customer.?name|firstandlastname<!-- es -->|nombre.*y.*apellidos<!-- fr-FR -->|^nom<!-- ja-JP -->|お名前|氏名<!-- pt-BR, pt-PT -->|^nome<!-- zh-CN -->|姓名</string>
+    <string name="autofill_attention_ignored_re" >attention|attn</string>
+    <string name="keyguard_password_pin_failed" >Operación PIN falló!</string>
+    <string name="lockscreen_sim_error_message_short" >Tarjeta Invalida</string>
+    <string name="autofill_name_specific_re" >^name<!-- fr-FR -->|^nom<!-- pt-BR, pt-PT -->|^nombre</string>
+    <string name="autofill_address_line_2_re" >address.?line2|address2|addr2|street|suite|unit<!-- de-DE -->|adresszusatz|ergänzende.?angaben<!-- es -->|direccion2|colonia|adicional<!-- fr-FR -->|addresssuppl|complementnom|appartement<!-- it-IT -->|indirizzo2<!-- ja-JP -->|住所2</string>
+    <string name="lockscreen_sim_pin_blocked" >PIN1 bloqueado. Tipee PUK1 para desbloquear PIN1</string>
+    <string name="autofill_area_code_notext_re" >^\\($</string>
+    <string name="stkCcSsToUssd" >Requisición SS modificada para requisición USSD</string>
+    <string name="alternate_eri_file" >/data/eri.xml</string>
+    <string name="autofill_name_on_card_re" >card.?holder|name.?on.?card|ccname|owner<!-- de-DE -->|karteninhaber<!-- es -->|nombre.*tarjeta<!-- fr-FR -->|nom.*carte<!-- it-IT -->|nome.*cart<!-- ja-JP -->|名前<!-- ru -->|Имя.*карты<!-- zh-CN -->|信用卡开户名|开户名|持卡人姓名<!-- zh-TW -->|持卡人姓名</string>
+    <string name="autofill_card_number_re" >number|card.?#|card.?no|ccnum<!-- de-DE -->|nummer<!-- es -->|credito|numero|número<!-- fr-FR -->|numéro<!-- ja-JP -->|カード番号<!-- ru -->|Номер.*карты<!-- zh-CN -->|信用卡号|信用卡号码<!-- zh-TW -->|信用卡卡號</string>
+    <string name="lockscreen_ruim_pin_blocked" >PIN1 bloqueado. Ingrese PUK1 para desbloquear PIN1</string>
+    <string name="autofill_middle_initial_re" >middle.*initial|m\\.i\\.|mi$</string>
+    <string name="keyguard_password_wrong_puk_code" >Codigo PUK incorrecto</string>
+    <string name="autofill_expiration_month_re" >expir|exp.*month|exp.*date|ccmonth<!-- de-DE -->|gueltig|gültig|monat<!-- es -->|fecha<!-- fr-FR -->|date.*exp<!-- it-IT -->|scadenza<!-- ja-JP -->|有効期限<!-- pt-BR, pt-PT -->|validade<!-- ru -->|Срок действия карты<!-- zh-CN -->|月</string>
+    <string name="autofill_last_name_re" >last.*name|lname|surname|last$<!-- de-DE -->|nachname<!-- es -->|apellidos<!-- fr-FR -->|famille|^nom<!-- it-IT -->|cognome<!-- ja-JP -->|姓<!-- pt-BR, pt-PT -->|morada|apelidos|surename|sobrenome<!-- ru -->|Фамилия</string>
+    <string name="lockscreen_perso_locked_message" >SIM/RUIM es Perso bloqueado</string>
+    <string name="autofill_phone_suffix_re" >sufijo.</string>
+    <string name="enablePin" >Sin éxito. Activar SIM/RUIM LOCK</string>
+    <string name="autofill_company_re" >company|business|organization|organisation|department<!-- de-DE -->|firma|firmenname<!-- es -->|empresa<!-- fr-FR -->|societe|société<!-- it-IT -->|ragione.?sociale<!-- ja-JP -->|会社<!-- ru -->|название.?компании<!-- zh-CN -->|单位|公司</string>
+    <string name="autofill_phone_extension_re" >ext<!-- pt-BR, pt-PT -->|ramal</string>
+    <string name="autofill_fax_re" >fax<!-- fr-FR -->|télécopie|telecopie<!-- ja-JP -->|ファックス<!-- ru -->|факс<!-- zh-CN -->|传真<!-- zh-TW -->|傳真</string>
+    <string name="autofill_address_line_1_re" >address.?line|address1|addr1|street<!-- de-DE -->|strasse|straße|hausnummer|housenumber<!-- en-GB -->|house.?name<!-- es -->|direccion|dirección<!-- fr-FR -->|adresse<!-- it-IT -->|indirizzo<!-- ja-JP -->|住所1<!-- pt-BR, pt-PT -->|morada|endereço<!-- ru -->|Адрес<!-- zh-CN -->|地址</string>
+    <string name="keyguard_password_enter_puk_code_for_subscription" >Ingresar PUK y nuevo codigo PIN para Suscripción</string>
+    <string name="keyguard_password_enter_pin_code_for_subscription" >Ingresar el codigo PIN para Subscripción</string>
+    <string name="autofill_email_re" >e.?mail<!-- ja-JP -->|メールアドレス<!-- ru -->|Электронной.?Почты<!-- zh-CN -->|邮件|邮箱<!-- zh-TW -->|電郵地址</string>
+    <string name="autofill_city_re" >city|town<!-- de-DE -->|ort|stadt<!-- en-AU -->|suburb<!-- es -->|ciudad|provincia|localidad|poblacion<!-- fr-FR -->|ville|commune<!-- it-IT -->|localita<!-- ja-JP -->|市区町村<!-- pt-BR, pt-PT -->|cidade<!-- ru -->|Город<!-- zh-CN -->|市<!-- zh-TW -->|分區</string>
+    <string name="autofill_state_re" >state|county|region|province<!-- de-DE -->|land<!-- en-UK -->|county|principality<!-- ja-JP -->|都道府県<!-- pt-BR, pt-PT -->|estado|provincia<!-- ru -->|область<!-- zh-CN -->|省<!-- zh-TW -->|地區</string>
+    <string name="stkCcSsToDial" >Requisición SS modificada para requisición DIAL.</string>
+    <string name="stkCcUssdToSs" >Requisición USSD modificada para requisición SS.</string>
+    <string name="autofill_phone_re" >phone<!-- de-DE -->|telefonnummer<!-- es -->|telefono|teléfono<!-- fr-FR -->|telfixe<!-- ja-JP -->|電話<!-- pt-BR, pt-PT -->|telefone|telemovel<!-- ru -->|телефон<!-- zh-CN -->|电话</string>
+    <string name="stkCcUssdToDial" >Petición USSD se modifica para DIAL petición.</string>
+    <string name="autofill_card_ignored_re" >^tarjeta</string>
+    <string name="wifi_available_sign_in_detailed" ><xliff:g id="wifi_network_ssid">%1$s</xliff:g></string>
+    <string name="autofill_phone_prefix_separator_re" >^-$|^\\)$</string>
+    <string name="autofill_card_cvc_re" >verificación|tarjeta de identificación|cvn|código de seguridad|código cw|cvc</string>
+    <string name="autofill_expiration_date_re" >exp|^/|year<!-- de-DE -->|ablaufdatum|gueltig|gültig|yahr<!-- es -->|fecha<!-- it-IT -->|scadenza<!-- ja-JP -->|有効期限<!-- pt-BR, pt-PT -->|validade<!-- ru -->|Срок действия карты<!-- zh-CN -->|年|有效期</string>
+    <string name="autofill_username_re" >user.?name|user.?id<!-- de-DE -->|vollständiger.?name<!-- zh-CN -->|用户名</string>
+    <string name="unsupportedMmiCode" >Código MMI solicitado no es compatible.</string>
+    <string name="managed_roaming_title" >Gerenció roaming</string>
+    <string name="autofill_middle_name_re" >middle.*name|mname|middle$<!-- es -->|apellido.?materno|lastlastname</string>
+    <string name="autofill_country_code_re" >country.*code|ccode|_cc</string>
+    <string name="pinpuk_attempts" >\nLos intentos restantes :</string>
+    <string name="autofill_first_name_re" >irst.*name|initials|fname|first$<!-- de-DE -->|vorname<!-- es -->|nombre<!-- fr-FR -->|forename|prénom|prenom<!-- ja-JP -->|名<!-- pt-BR, pt-PT -->|nome<!-- ru -->|Имя</string>
+    <string name="autofill_address_line_3_re" >address.?line3|address3|addr3|street|line3<!-- es -->|municipio<!-- fr-FR -->|batiment|residence<!-- it-IT -->|indirizzo3</string>
+    <string name="autofill_address_type_same_as_re" >mismo como</string>
+    <string name="keyguard_pin_accepted" >Código aceptados</string>
+    <string name="autofill_phone_suffix_separator_re" >^-$</string>
+    <string name="permissions_format" ><xliff:g id="perm_line1">%1$s</xliff:g>, <xliff:g id="perm_line2">%2$s</xliff:g></string>
+    <string name="autofill_phone_prefix_re" >prefix<!-- fr-FR -->|preselection<!-- pt-BR, pt-PT -->|ddd</string>
 </resources>

@@ -159,8 +159,7 @@ class BluetoothEventLoop {
         mAdapter = adapter;
         //WakeLock instantiation in BluetoothEventLoop class
         PowerManager pm = (PowerManager)context.getSystemService(Context.POWER_SERVICE);
-        mWakeLock = pm.newWakeLock(PowerManager.FULL_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP
-                | PowerManager.ON_AFTER_RELEASE, TAG);
+        mWakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, TAG);
         mWakeLock.setReferenceCounted(false);
         initializeNativeDataNative();
     }

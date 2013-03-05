@@ -170,11 +170,20 @@ public class FmConfig {
         re = FmReceiverJNI.setBandNative (fd, configSettings.getLowerLimit(), configSettings.getUpperLimit());
         if (re < 0)
           return false;
+        String L = SystemProperties.get("persist.FactoryKitFm");
+	Log.e (TAG, "persist.FactoryKitFm =" + L);
+        if (SystemProperties.get("persist.FactoryKitFm").equals(0))
+	{
+	    Log.v (TAG, "persist.FactoryKitFm = 0 and go etControlNative");
+            re = FmReceiverJNI.setControlNative (fd, V4L2_CID_PRIVATE_TAVARUA_REGION, configSettings.mRadioBand);
+		    if (re < 0)
+            return false;
+        } else { 
+		  Log.v (TAG, "persist.FactoryKitFm = 1 and do not go etControlNative");
+		  System.setProperty("persist.FactoryKitFm", "0");
+		}
+		/* setControlNative for V4L2_CID_PRIVATE_TAVARUA_REGION triggers the config change*/
 
-        re = FmReceiverJNI.setControlNative (fd, V4L2_CID_PRIVATE_TAVARUA_REGION, configSettings.mRadioBand);
-        /* setControlNative for V4L2_CID_PRIVATE_TAVARUA_REGION triggers the config change*/
-        if (re < 0)
-          return false;
 
         return true;
     }

@@ -167,6 +167,8 @@ public class IccProvider extends ContentProvider {
         int len = inVal.length();
         String retVal = inVal;
 
+        if (len == 0) return "";
+
         if (inVal.charAt(0) == '\'' && inVal.charAt(len-1) == '\'') {
             retVal = inVal.substring(1, len-1);
         }

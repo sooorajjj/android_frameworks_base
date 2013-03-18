@@ -65,7 +65,7 @@ import com.android.systemui.R;
 public class NetworkController extends BroadcastReceiver {
     // debug
     static final String TAG = "StatusBar.NetworkController";
-    static final boolean DEBUG = SystemProperties.getInt("ro.debuggable", 0) == 1 ? true : false;
+    static final boolean DEBUG = false;
     static final boolean CHATTY = SystemProperties.getInt("ro.debuggable", 0) == 1 ? true : false; // additional diagnostics, but not logspew
 
     // telephony

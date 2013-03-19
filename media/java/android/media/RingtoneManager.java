@@ -501,12 +501,12 @@ public class RingtoneManager {
     private Cursor getMediaRingtones() {
          // Get the external media cursor. First check to see if it is mounted.
         final String status = Environment.getExternalStorageState();
-        
+        String whereClause = null;
         return (status.equals(Environment.MEDIA_MOUNTED) ||
                     status.equals(Environment.MEDIA_MOUNTED_READ_ONLY))
                 ? query(
                     MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, MEDIA_COLUMNS,
-                    constructBooleanTrueWhereClause(mFilterColumns, mIncludeDrm), null,
+                    whereClause, null,
                     MediaStore.Audio.Media.DEFAULT_SORT_ORDER)
                 : null;
     }

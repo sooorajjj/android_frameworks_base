@@ -1235,6 +1235,9 @@ public interface CommandsInterface {
 
     void setNetworkSelectionModeManual(String operatorNumeric, Message response);
 
+    void setNetworkSelectionModeManualWithRadioTech(String operatorNumeric, String radioTech,
+            Message response);
+
     /**
      * Queries whether the current network selection mode is automatic
      * or manual

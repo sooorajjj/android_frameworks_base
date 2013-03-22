@@ -26,6 +26,7 @@ import android.os.RegistrantList;
 import android.os.Registrant;
 import android.os.Handler;
 import android.os.AsyncResult;
+import android.os.Message;
 import android.os.SystemProperties;
 import android.util.Log;
 
@@ -812,6 +813,17 @@ public abstract class BaseCommands implements CommandsInterface {
     }
 
     public void enableEngineerMode(int on) {}
+
+    public void setNetworkSelectionModeManualWithRadioTech(String operatorNumeric, String radioTech,
+            Message response)
+    {
+        if (response != null) {
+            AsyncResult.forMessage(response).exception
+                = new RuntimeException("Unimplemented");
+
+            response.sendToTarget();
+        }
+    }
 
     @Override
     public void testingEmergencyCall() {}

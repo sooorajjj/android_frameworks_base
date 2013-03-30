@@ -148,11 +148,6 @@ public class PowerProfile {
     private static final String TAG_ARRAYITEM = "value";
     private static final String ATTR_NAME = "name";
 
-    private static final String BOARD_TYPE1 = "type1";
-    private static final double POWER_BATTERY_CAPACITY_BOARD_TYPE1 = 4000.0;
-    private static final String BOARD_TYPE2 = "type2";
-    private static final double POWER_BATTERY_CAPACITY_BOARD_TYPE2 = 6000.0;
-
     public PowerProfile(Context context) {
         // Read the XML file for the given profile (normally only one per
         // device)
@@ -197,13 +192,6 @@ public class PowerProfile {
                         } catch (NumberFormatException nfe) {
                         }
                         if (element.equals(TAG_ITEM)) {
-                            if (POWER_BATTERY_CAPACITY.equals(name)) {
-                                if (BOARD_TYPE1.equals(android.os.SystemProperties.get(android.os.Build.BOARD))) {
-                                    value = POWER_BATTERY_CAPACITY_BOARD_TYPE1;
-                                } else if (BOARD_TYPE2.equals(android.os.SystemProperties.get(android.os.Build.BOARD))) {
-                                    value = POWER_BATTERY_CAPACITY_BOARD_TYPE2;
-                                }
-                            }
                             sPowerMap.put(name, value);
                         } else if (parsingArray) {
                             array.add(value);

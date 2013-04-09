@@ -979,7 +979,14 @@ public class WifiP2pService extends IWifiP2pManager.Stub {
                         }
                    } else {
                          if (mWifiNative.p2pGroupAdd()) {
-                             replyToMessage(message, WifiP2pManager.CREATE_GROUP_SUCCEEDED);
+                             try {
+                                 if (mGroup.getInterface() != null) {
+                                     mWifiNative.setP2pGroupIdle(mGroup.getInterface(), 0);
+                                     replyToMessage(message, WifiP2pManager.CREATE_GROUP_SUCCEEDED);
+                                 }
+                             } catch (Exception e){
+                                 replyToMessage(message, WifiP2pManager.CREATE_GROUP_SUCCEEDED);
+                             }
                          } else {
                               replyToMessage(message, WifiP2pManager.CREATE_GROUP_FAILED,
                                 WifiP2pManager.ERROR);

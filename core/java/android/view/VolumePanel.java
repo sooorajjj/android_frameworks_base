@@ -159,7 +159,7 @@ public class VolumePanel extends Handler implements OnSeekBarChangeListener, Vie
                 R.string.volume_icon_description_media,
                 R.drawable.ic_audio_vol,
                 R.drawable.ic_audio_vol_mute,
-                true),
+                false),
         // for now, use media resources for master volume
         MasterStream(STREAM_MASTER,
                 R.string.volume_icon_description_media, //FIXME should have its own description

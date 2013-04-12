@@ -15605,6 +15605,8 @@ package android.os {
     method public static java.io.File getInternalStorageDirectory();
     method public static java.lang.String getInternalStorageState();
     method public static java.io.File getRootDirectory();
+    method public static java.io.File getSecondaryStorageDirectory();
+    method public static java.lang.String getSecondaryStorageState();
     method public static boolean isExternalStorageEmulated();
     method public static boolean isExternalStorageRemovable();
     field public static java.lang.String DIRECTORY_ALARMS;

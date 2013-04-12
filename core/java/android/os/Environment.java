@@ -132,6 +132,9 @@ public class Environment {
     private static final File INTERNAL_STORAGE_DIRECTORY
             = getDirectory("INTERNAL_STORAGE", "/storage/sdcard1");
 
+    private static final File SECONDARY_STORAGE_DIRECTORTY
+            = getDirectory("SECONDARY_STORAGE_DIRECTORTY","/storage/sdcard1");
+
     private static final File EXTERNAL_STORAGE_ANDROID_DATA_DIRECTORY = new File(new File(
             getDirectory("EXTERNAL_STORAGE", "/storage/sdcard0"), "Android"), "data");
 
@@ -195,6 +198,20 @@ public class Environment {
 
     public static File getInternalStorageDirectory() {
         return INTERNAL_STORAGE_DIRECTORY;
+    }
+
+    public static File getSecondaryStorageDirectory() {
+        return SECONDARY_STORAGE_DIRECTORTY;
+    }
+
+    public static String getSecondaryStorageState() {
+        try {
+            IMountService mountService = IMountService.Stub.asInterface(ServiceManager
+                    .getService("mount"));
+            return mountService.getVolumeState(getSecondaryStorageDirectory().toString());
+        } catch (Exception rex) {
+            return Environment.MEDIA_REMOVED;
+        }
     }
 
     /**

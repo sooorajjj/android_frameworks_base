@@ -1713,6 +1713,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
             loadIntegerSetting(stmt, Settings.Secure.WIFI_MAX_DHCP_RETRY_COUNT,
                     R.integer.def_max_dhcp_retries);
+
+            loadSetting(stmt, Settings.Secure.DEFAULT_INPUT_METHOD,
+                    SystemProperties.get("ro.sf.def_input_method", mContext.getResources().getString(R.string.def_input_method))
+                    );
         } finally {
             if (stmt != null) stmt.close();
         }

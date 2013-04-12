@@ -151,4 +151,7 @@
     <!-- Number of retries for connecting to DHCP.
          Value here is the same as WifiStateMachine.DEFAULT_MAX_DHCP_RETRIES -->
     <integer name="def_max_dhcp_retries">9</integer>
+
+    <!-- Default for input method -->
+    <string name="def_input_method" translatable="false">@null</string>
 </resources>

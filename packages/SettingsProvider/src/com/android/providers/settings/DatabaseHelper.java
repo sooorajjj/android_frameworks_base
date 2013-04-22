@@ -1253,9 +1253,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         try {
             stmt = db.compileStatement("INSERT OR REPLACE INTO system(name,value)"
                     + " VALUES(?,?);");
+			if(SystemProperties.getInt("ro.debuggable", 0) == 0)
+			{
             loadIntegerSetting(stmt, Settings.System.SCREEN_OFF_TIMEOUT,
                     R.integer.def_screen_off_timeout);
-            db.setTransactionSuccessful();
+            } else {
+            loadIntegerSetting(stmt, Settings.System.SCREEN_OFF_TIMEOUT,
+            R.integer.def_screen_off_timeout_debug);
+			}
+			db.setTransactionSuccessful();
         } finally {
             db.endTransaction();
             if (stmt != null)
@@ -1521,16 +1527,28 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             loadBooleanSetting(stmt, Settings.System.AUTO_TIME_ZONE,
                     R.bool.def_auto_time_zone); // Sync timezone to NITZ
 
+			if(SystemProperties.getInt("ro.debuggable", 0) == 0)
+			{
             loadIntegerSetting(stmt, Settings.System.SCREEN_BRIGHTNESS,
                     R.integer.def_screen_brightness);
+			} else {
+            loadIntegerSetting(stmt, Settings.System.SCREEN_BRIGHTNESS,
+                    R.integer.def_screen_brightness_debug);
+			}
 
             loadBooleanSetting(stmt, Settings.System.SCREEN_BRIGHTNESS_MODE,
                     R.bool.def_screen_brightness_automatic_mode);
 
             loadDefaultAnimationSettings(stmt);
 
+            if(SystemProperties.getInt("ro.debuggable", 0) == 0)
+			{
             loadBooleanSetting(stmt, Settings.System.ACCELEROMETER_ROTATION,
                     R.bool.def_accelerometer_rotation);
+			} else {
+            loadBooleanSetting(stmt, Settings.System.ACCELEROMETER_ROTATION,
+                    R.bool.def_accelerometer_rotation_debug);
+			}
 
             loadDefaultHapticSettings(stmt);
 

@@ -179,9 +179,9 @@ public class PowerManagerService extends IPowerManager.Stub
 
     static final int ANIM_STEPS = 60; // nominal # of frames at 60Hz
     // Slower animation for autobrightness changes
-    static final int AUTOBRIGHTNESS_ANIM_STEPS = 1 * ANIM_STEPS;
+    static final int AUTOBRIGHTNESS_ANIM_STEPS = 2 * ANIM_STEPS;
     // Even slower animation for autodimness changes
-    static final int AUTODIMNESS_ANIM_STEPS = 4 * ANIM_STEPS;
+    static final int AUTODIMNESS_ANIM_STEPS = 15 * ANIM_STEPS;
     // Number of steps when performing a more immediate brightness change.
     static final int IMMEDIATE_ANIM_STEPS = 4;
 

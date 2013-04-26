@@ -982,8 +982,8 @@ public class WifiService extends IWifiManager.Stub {
                     //Delayed shutdown if wifi is connected
                     if (mNetworkInfo.getDetailedState() == DetailedState.CONNECTED) {
                         if (DBG) Slog.d(TAG, "setting ACTION_DEVICE_IDLE: " + idleMillis + " ms");
-                        mAlarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis()
-                                + idleMillis, mIdleIntent);
+                        long triggerTime = System.currentTimeMillis() + (15*1000);
+                        mAlarmManager.set(AlarmManager.RTC_WAKEUP, triggerTime, mIdleIntent);
                     } else {
                         setDeviceIdleAndUpdateWifi(true);
                     }

@@ -159,9 +159,9 @@
     <string name="def_input_method" translatable="false">@null</string>
 
     <!-- Default for wifi sleep policy.
-         0 -> Settings.System.WIFI_SLEEP_POLICY_DEFAULT, Always
+         0 -> Settings.System.WIFI_SLEEP_POLICY_DEFAULT
          1 -> Settings.System.WIFI_SLEEP_POLICY_NEVER_WHILE_PLUGGED
-         2 -> Settings.System.WIFI_SLEEP_POLICY_NEVER
+         2 -> Settings.System.WIFI_SLEEP_POLICY_NEVER, never go to sleep
          -->
-    <integer name="def_wifi_sleep_policy">0</integer>
+    <integer name="def_wifi_sleep_policy">2</integer>
 </resources>

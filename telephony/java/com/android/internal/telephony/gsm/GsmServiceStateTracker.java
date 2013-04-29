@@ -618,7 +618,7 @@ public class GsmServiceStateTracker extends ServiceStateTracker {
         String plmn = ss.getOperatorAlphaLong();
 
         // For emergency calls only, pass the EmergencyCallsOnly string via EXTRA_PLMN
-        if (mEmergencyOnly && cm.getRadioState().isOn()) {
+        if (phone.mIsVoiceCapable && mEmergencyOnly && cm.getRadioState().isOn()) {
             plmn = Resources.getSystem().
                 getText(com.android.internal.R.string.emergency_calls_only).toString();
             if (DBG) log("updateSpnDisplay: emergency only and radio is on plmn='" + plmn + "'");

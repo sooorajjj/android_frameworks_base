@@ -141,7 +141,7 @@ public abstract class PhoneBase extends Handler implements Phone {
     int mCallRingContinueToken;
     int mCallRingDelay;
     public boolean mIsTheCurrentActivePhone = true;
-    boolean mIsVoiceCapable = true;
+    public boolean mIsVoiceCapable = true;
     protected UiccController mUiccController = null;
     public AtomicReference<IccRecords> mIccRecords = new AtomicReference<IccRecords>();
     public SmsStorageMonitor mSmsStorageMonitor;

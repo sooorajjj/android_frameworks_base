@@ -32,7 +32,6 @@ import android.media.AudioManager;
 import android.media.AudioService;
 import android.net.ConnectivityManager;
 import android.os.SystemProperties;
-import android.os.Build;
 import android.provider.Settings;
 import android.provider.Settings.Secure;
 import android.text.TextUtils;
@@ -1254,15 +1253,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         try {
             stmt = db.compileStatement("INSERT OR REPLACE INTO system(name,value)"
                     + " VALUES(?,?);");
-			if (Build.IS_DEBUGGABLE)
-			{
-                loadIntegerSetting(stmt, Settings.System.SCREEN_OFF_TIMEOUT,
-                R.integer.def_screen_off_timeout_debug);
-            } else {
-			    loadIntegerSetting(stmt, Settings.System.SCREEN_OFF_TIMEOUT,
-                R.integer.def_screen_off_timeout);
-			}
-			db.setTransactionSuccessful();
+            loadIntegerSetting(stmt, Settings.System.SCREEN_OFF_TIMEOUT,
+                    R.integer.def_screen_off_timeout);
+            db.setTransactionSuccessful();
         } finally {
             db.endTransaction();
             if (stmt != null)
@@ -1495,14 +1488,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     ("1".equals(SystemProperties.get("ro.kernel.qemu")) ||
                         mContext.getResources().getBoolean(R.bool.def_stay_on_while_plugged_in))
                      ? 1 : 0);
-			if (Build.IS_DEBUGGABLE)
-			{
-                loadIntegerSetting(stmt, Settings.System.SCREEN_OFF_TIMEOUT,
-                R.integer.def_screen_off_timeout_debug);
-            } else {
-			    loadIntegerSetting(stmt, Settings.System.SCREEN_OFF_TIMEOUT,
-                R.integer.def_screen_off_timeout);
-			}
+            loadIntegerSetting(stmt, Settings.System.SCREEN_OFF_TIMEOUT,
+                    R.integer.def_screen_off_timeout);
 
             // Set default cdma emergency tone
             loadSetting(stmt, Settings.System.EMERGENCY_TONE, 0);
@@ -1534,29 +1521,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             loadBooleanSetting(stmt, Settings.System.AUTO_TIME_ZONE,
                     R.bool.def_auto_time_zone); // Sync timezone to NITZ
 
-			if (Build.IS_DEBUGGABLE)
-			{
-                loadIntegerSetting(stmt, Settings.System.SCREEN_BRIGHTNESS,
-                        R.integer.def_screen_brightness_debug);
-
-			} else {
-                loadIntegerSetting(stmt, Settings.System.SCREEN_BRIGHTNESS,
-                        R.integer.def_screen_brightness);
-			}
+            loadIntegerSetting(stmt, Settings.System.SCREEN_BRIGHTNESS,
+                    R.integer.def_screen_brightness);
 
             loadBooleanSetting(stmt, Settings.System.SCREEN_BRIGHTNESS_MODE,
                     R.bool.def_screen_brightness_automatic_mode);
 
             loadDefaultAnimationSettings(stmt);
 
-			if (Build.IS_DEBUGGABLE)
-			{
-                loadBooleanSetting(stmt, Settings.System.ACCELEROMETER_ROTATION,
-                        R.bool.def_accelerometer_rotation_debug);
-			} else {
-                loadBooleanSetting(stmt, Settings.System.ACCELEROMETER_ROTATION,
-                        R.bool.def_accelerometer_rotation);
-			}
+            loadBooleanSetting(stmt, Settings.System.ACCELEROMETER_ROTATION,
+                    R.bool.def_accelerometer_rotation);
 
             loadDefaultHapticSettings(stmt);
 

@@ -124,6 +124,7 @@ class ServerThread extends Thread {
         int factoryTest = "".equals(factoryTestStr) ? SystemServer.FACTORY_TEST_OFF
                 : Integer.parseInt(factoryTestStr);
         final boolean headless = "1".equals(SystemProperties.get("ro.config.headless", "0"));
+        int persistFactoryTest = SystemProperties.getInt("persist.init.factory.mode", 0);
 
         AccountManagerService accountManager = null;
         ContentService contentService = null;
@@ -284,6 +285,12 @@ class ServerThread extends Thread {
                 }
             }
 
+            if (persistFactoryTest == SystemServer.PERSIST_FACTORY_TEST_HIGH_LEVEL) {
+                Settings.System.putInt(mContentResolver, Settings.System.ACCELEROMETER_ROTATION, 0);
+                Settings.System.putInt(mContentResolver, Settings.System.SCREEN_BRIGHTNESS_MODE, Settings.System.SCREEN_BRIGHTNESS_MODE_MANUAL);
+                Settings.System.putInt(mContentResolver, Settings.System.SCREEN_BRIGHTNESS, 255);
+                Settings.System.putInt(mContentResolver, Settings.System.SCREEN_OFF_TIMEOUT, -1);
+            }
         } catch (RuntimeException e) {
             Slog.e("System", "******************************************");
             Slog.e("System", "************ Failure starting core service", e);
@@ -975,6 +982,10 @@ public class SystemServer {
     public static final int FACTORY_TEST_OFF = 0;
     public static final int FACTORY_TEST_LOW_LEVEL = 1;
     public static final int FACTORY_TEST_HIGH_LEVEL = 2;
+
+    public static final int PERSIST_FACTORY_TEST_OFF = 0;
+    public static final int PERSIST_FACTORY_TEST_HIGH_LEVEL = 1;
+    public static final int PERSIST_FACTORY_TEST_LOW_LEVEL = 2;
 
     static Timer timer;
     static final long SNAPSHOT_INTERVAL = 60 * 60 * 1000; // 1hr

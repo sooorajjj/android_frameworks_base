@@ -200,7 +200,7 @@ public class IccProvider extends ContentProvider {
         // parse where clause
         String tag = null;
         String number = null;
-        String[] emails = null;
+        String emails = null;
         String pin2 = null;
 
         String[] tokens = where.split("AND");
@@ -225,8 +225,7 @@ public class IccProvider extends ContentProvider {
             } else if (STR_NUMBER.equals(key)) {
                 number = normalizeValue(val);
             } else if (STR_EMAILS.equals(key)) {
-                //TODO(): Email is null.
-                emails = null;
+                emails = normalizeValue(val);
             } else if (STR_PIN2.equals(key)) {
                 pin2 = normalizeValue(val);
             }
@@ -375,7 +374,7 @@ public class IccProvider extends ContentProvider {
     }
 
 
-    private boolean deleteIccRecordFromEf(int efType, String name, String number, String[] emails,
+    private boolean deleteIccRecordFromEf(int efType, String name, String number, String emails,
             String pin2) {
         if (DBG) log("deleteIccRecordFromEf: efType=" + efType +
                 ", name=" + name + ", number=" + number + ", emails=" + emails + ", pin2=" + pin2);
@@ -386,8 +385,8 @@ public class IccProvider extends ContentProvider {
             IIccPhoneBook iccIpb = IIccPhoneBook.Stub.asInterface(
                     ServiceManager.getService("simphonebook"));
             if (iccIpb != null) {
-                success = iccIpb.updateAdnRecordsInEfBySearch(efType,
-                        name, number, "", "", pin2);
+                success = iccIpb.updateAdnRecordsMailInEfBySearch(efType,
+                        name, number, emails, "", "", "", pin2);
             }
         } catch (RemoteException ex) {
             // ignore it

@@ -22,6 +22,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.os.ServiceManager;
+import android.text.TextUtils;
 
 import com.android.internal.telephony.uicc.AdnRecord;
 import com.android.internal.telephony.uicc.AdnRecordCache;
@@ -192,6 +193,66 @@ public abstract class IccPhoneBookInterfaceManager extends IIccPhoneBook.Stub {
         return success;
     }
 
+	/**
+     * Replace oldAdn with newAdn in ADN-like record in EF
+     *
+     * getAdnRecordsInEf must be called at least once before this function,
+     * otherwise an error will be returned. Currently the email field
+     * if set in the ADN record is ignored.
+     * throws SecurityException if no WRITE_CONTACTS permission
+     *
+     * @param efid must be one among EF_ADN, EF_FDN, and EF_SDN
+     * @param oldTag adn tag to be replaced
+     * @param oldPhoneNumber adn number to be replaced
+     *        Set both oldTag and oldPhoneNubmer to "" means to replace an
+     *        empty record, aka, insert new record
+     * @param newTag adn tag to be stored
+     * @param newPhoneNumber adn number ot be stored
+     *        Set both newTag and newPhoneNubmer to "" means to replace the old
+     *        record with empty one, aka, delete old record
+     * @param pin2 required to update EF_FDN, otherwise must be null
+     * @return true for success
+     */
+    public boolean
+    updateAdnRecordsMailInEfBySearch (int efid,
+            String oldTag, String oldPhoneNumber, String oldEmail,
+            String newTag, String newPhoneNumber, String newEmail, String pin2) {
+
+
+        if (phone.getContext().checkCallingOrSelfPermission(
+                android.Manifest.permission.WRITE_CONTACTS)
+            != PackageManager.PERMISSION_GRANTED) {
+            throw new SecurityException(
+                    "Requires android.permission.WRITE_CONTACTS permission");
+        }
+
+
+        if (DBG) logd("updateAdnRecordsInEfBySearch: efid=" + efid +
+                " ("+ oldTag + "," + oldPhoneNumber + ")"+ "==>" +
+                " ("+ newTag + "," + newPhoneNumber + ")"+ "==>" +
+                " ("+ oldEmail + "," + newEmail + ")"+ " pin2=" + pin2);
+
+        String[] oldEmailArray = TextUtils.isEmpty(oldEmail)? null: getStringArray(oldEmail);
+        String[] newEmailArray = TextUtils.isEmpty(newEmail)? null: getStringArray(newEmail);
+        efid = updateEfForIccType(efid);
+
+        synchronized(mLock) {
+            checkThread();
+            success = false;
+            AtomicBoolean status = new AtomicBoolean(false);
+            Message response = mBaseHandler.obtainMessage(EVENT_UPDATE_DONE, status);
+            AdnRecord oldAdn = new AdnRecord(oldTag, oldPhoneNumber, oldEmailArray);
+            AdnRecord newAdn = new AdnRecord(newTag, newPhoneNumber, newEmailArray);
+            if (adnCache != null) {
+                adnCache.updateAdnBySearch(efid, oldAdn, newAdn, pin2, response);
+                waitForResult(status);
+            } else {
+                logd("Failure while trying to update by search due to uninitialised adncache");
+            }
+        }
+        return success;
+    }
+
     /**
      * Update an ADN-like EF record by record index
      *
@@ -294,6 +355,12 @@ public abstract class IccPhoneBookInterfaceManager extends IIccPhoneBook.Stub {
                         "You cannot call query on this provder from the main UI thread.");
             }
         }
+    }
+
+    private String[] getStringArray(String str) {
+        if (str != null)
+            return str.split(",");
+        return null;
     }
 
     protected void waitForResult(AtomicBoolean status) {

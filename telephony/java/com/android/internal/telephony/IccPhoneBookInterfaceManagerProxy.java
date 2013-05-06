@@ -62,6 +62,15 @@ public class IccPhoneBookInterfaceManagerProxy extends IIccPhoneBook.Stub {
     }
 
     public boolean
+    updateAdnRecordsMailInEfBySearch (int efid,
+            String oldTag, String oldPhoneNumber, String oldEmail,
+            String newTag, String newPhoneNumber, String newEmail,
+            String pin2) throws android.os.RemoteException {
+        return mIccPhoneBookInterfaceManager.updateAdnRecordsMailInEfBySearch(
+                efid, oldTag, oldPhoneNumber, oldEmail, newTag, newPhoneNumber, newEmail, pin2);
+    }
+
+    public boolean
     updateAdnRecordsInEfByIndex(int efid, String newTag,
             String newPhoneNumber, int index, String pin2) throws android.os.RemoteException {
         return mIccPhoneBookInterfaceManager.updateAdnRecordsInEfByIndex(efid,

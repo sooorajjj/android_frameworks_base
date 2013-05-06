@@ -69,6 +69,14 @@ interface IIccPhoneBook {
             String pin2);
 
     /**
+     * @return true for success
+     */
+    boolean updateAdnRecordsMailInEfBySearch(int efid,
+            String oldTag, String oldPhoneNumber, String oldEmail,
+            String newTag, String newPhoneNumber, String newEmail,
+            String pin2);
+
+    /**
      * Update an ADN-like EF record by record index
      *
      * This is useful for iteration the whole ADN file, such as write the whole

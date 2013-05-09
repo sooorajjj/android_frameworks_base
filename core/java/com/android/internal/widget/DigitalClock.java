@@ -18,16 +18,23 @@ package com.android.internal.widget;
 
 import com.android.internal.R;
 
+import android.app.ActivityManagerNative;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager.NameNotFoundException;
+import android.content.res.Configuration;
+import android.content.res.Resources;
+import android.content.res.Resources.NotFoundException;
 import android.database.ContentObserver;
 import android.graphics.Typeface;
 import android.os.Handler;
+import android.os.RemoteException;
 import android.provider.Settings;
 import android.text.format.DateFormat;
 import android.util.AttributeSet;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -162,6 +169,41 @@ public class DigitalClock extends RelativeLayout {
         super(context, attrs);
     }
 
+    private boolean isLandscape(Configuration configuration) {
+        return configuration.orientation ==
+            Configuration.ORIENTATION_LANDSCAPE;
+    }
+
+    private void preventTimeTextFromTooLarge() {
+        if (mContext == null) return;
+
+        Configuration currentConfiguration = new Configuration();
+
+        try {
+            currentConfiguration.updateFrom(
+                    ActivityManagerNative.getDefault().getConfiguration());
+        } catch (RemoteException e) {
+            currentConfiguration = null;
+        } finally {
+            if (currentConfiguration == null) return;
+        }
+
+        if (!isLandscape(currentConfiguration)) return;
+
+        if (currentConfiguration.fontScale <= 1) return;
+
+        float timeDisplayBackgroundSize = mTimeDisplayBackground.getTextSize();
+        float timeDisplayForegroundSize = mTimeDisplayForeground.getTextSize();
+
+        mTimeDisplayBackground.setTextSize(TypedValue.COMPLEX_UNIT_PX,
+                mTimeDisplayBackground.getTextSize()
+                        / currentConfiguration.fontScale);
+
+        mTimeDisplayForeground.setTextSize(TypedValue.COMPLEX_UNIT_PX,
+                mTimeDisplayForeground.getTextSize()
+                        / currentConfiguration.fontScale);
+    }
+
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
@@ -173,6 +215,9 @@ public class DigitalClock extends RelativeLayout {
 
         mTimeDisplayForeground = (TextView) findViewById(R.id.timeDisplayForeground);
         mTimeDisplayForeground.setTypeface(sForegroundFont);
+
+        preventTimeTextFromTooLarge();
+
         mAmPm = new AmPm(this, null);
         mCalendar = Calendar.getInstance();
 

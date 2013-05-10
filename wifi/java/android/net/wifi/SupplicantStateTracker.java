@@ -111,6 +111,7 @@ class SupplicantStateTracker extends StateMachine {
                 break;
             case AUTHENTICATING:
             case ASSOCIATING:
+            case KEYFAIL:
             case ASSOCIATED:
             case FOUR_WAY_HANDSHAKE:
             case GROUP_HANDSHAKE:

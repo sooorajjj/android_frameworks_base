@@ -12317,6 +12317,7 @@ package android.net.wifi {
     enum_constant public static final android.net.wifi.SupplicantState INVALID;
     enum_constant public static final android.net.wifi.SupplicantState SCANNING;
     enum_constant public static final android.net.wifi.SupplicantState UNINITIALIZED;
+    enum_constant public static final android.net.wifi.SupplicantState KEYFAIL;
   }
 
   public class WifiConfiguration implements android.os.Parcelable {

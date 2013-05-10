@@ -116,6 +116,13 @@ public enum SupplicantState implements Parcelable {
     GROUP_HANDSHAKE,
 
     /**
+     * Prevent user type wrong key.
+     * <p/>
+     * This state is control for prevent user type wrong passwd.
+     */
+    KEYFAIL,
+
+    /**
      * All authentication completed.
      * <p/>
      * This state is entered when the full authentication process is
@@ -159,6 +166,7 @@ public enum SupplicantState implements Parcelable {
      */
     INVALID;
 
+
     /**
      * Returns {@code true} if the supplicant state is valid and {@code false}
      * otherwise.
@@ -179,6 +187,7 @@ public enum SupplicantState implements Parcelable {
             case ASSOCIATED:
             case FOUR_WAY_HANDSHAKE:
             case GROUP_HANDSHAKE:
+            case KEYFAIL:
                 return true;
             case COMPLETED:
             case DISCONNECTED:
@@ -202,6 +211,7 @@ public enum SupplicantState implements Parcelable {
             case FOUR_WAY_HANDSHAKE:
             case GROUP_HANDSHAKE:
             case COMPLETED:
+            case KEYFAIL:
                 return true;
             case DISCONNECTED:
             case INTERFACE_DISABLED:
@@ -228,6 +238,7 @@ public enum SupplicantState implements Parcelable {
             case FOUR_WAY_HANDSHAKE:
             case GROUP_HANDSHAKE:
             case COMPLETED:
+            case KEYFAIL:
                 return true;
             case INTERFACE_DISABLED:
             case UNINITIALIZED:

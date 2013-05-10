@@ -53,6 +53,7 @@ public class WifiInfo implements Parcelable {
         stateMap.put(SupplicantState.DORMANT, DetailedState.DISCONNECTED);
         stateMap.put(SupplicantState.UNINITIALIZED, DetailedState.IDLE);
         stateMap.put(SupplicantState.INVALID, DetailedState.FAILED);
+        stateMap.put(SupplicantState.KEYFAIL, DetailedState.CONNECTING);
     }
 
     private SupplicantState mSupplicantState;

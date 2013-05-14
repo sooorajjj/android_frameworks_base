@@ -149,10 +149,13 @@ public class UiccCard {
         // handles card absence and presence directly.
         // TODO: 1. Check property persist.radio.apm_sim_not_pwdn and radio state
         //  before notifying ABSENT
-        //if (oldState != CardState.CARDSTATE_ABSENT && mCardState == CardState.CARDSTATE_ABSENT) {
-        //    mAbsentRegistrants.notifyRegistrants();
-        //    mHandler.sendMessage(mHandler.obtainMessage(EVENT_CARD_REMOVED, null));
-        //} else if (oldState == CardState.CARDSTATE_ABSENT && mCardState != CardState.CARDSTATE_ABSENT) {
+        if (oldState != null && oldState != CardState.CARDSTATE_ABSENT && mCardState == CardState.CARDSTATE_ABSENT) {
+            if (mCi.getRadioState().isOn()) {
+                log("EVENT_CARD_REMOVED");
+            //    mAbsentRegistrants.notifyRegistrants();
+                mHandler.sendMessage(mHandler.obtainMessage(EVENT_CARD_REMOVED, null));
+            }
+        } //else if (oldState == CardState.CARDSTATE_ABSENT && mCardState != CardState.CARDSTATE_ABSENT) {
         //    mHandler.sendMessage(mHandler.obtainMessage(EVENT_CARD_ADDED, null));
         //}
 

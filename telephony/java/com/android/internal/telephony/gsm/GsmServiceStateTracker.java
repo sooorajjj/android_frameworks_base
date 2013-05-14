@@ -163,6 +163,7 @@ public class GsmServiceStateTracker extends ServiceStateTracker {
     protected String curSpn = null;
     protected String curPlmn = null;
     protected int curSpnRule = 0;
+    protected int curState;
 
     /** waiting period before recheck gprs and voice registration. */
     static final int DEFAULT_GPRS_CHECK_PERIOD_MILLIS = 60 * 1000;
@@ -268,6 +269,8 @@ public class GsmServiceStateTracker extends ServiceStateTracker {
         // Gsm doesn't support OTASP so its not needed
         phone.notifyOtaspChanged(OTASP_NOT_NEEDED);
         Log.i(LOG_TAG,"Is EONS enabled: " + mEonsEnabled);
+
+        curState = ss.getState();
 
         // For CDMA global phone registered on 3GPP get the CDMA subscription
         // for voice mail number translation and also get the PRL version to be
@@ -610,12 +613,18 @@ public class GsmServiceStateTracker extends ServiceStateTracker {
     }
 
     protected void updateSpnDisplay() {
+        int rule = 0;
+        String spn = null;
+        String plmn = null;
+        int ssState = ss.getState();
+
         if (mIccRecords == null) {
-            return;
+            log("updateSpnDisplay: mIccRecords is null");
+        } else {
+            rule = mIccRecords.getDisplayRule(ss.getOperatorNumeric());
+            spn = mIccRecords.getServiceProviderName();
+            plmn = ss.getOperatorAlphaLong();
         }
-        int rule = mIccRecords.getDisplayRule(ss.getOperatorNumeric());
-        String spn = mIccRecords.getServiceProviderName();
-        String plmn = ss.getOperatorAlphaLong();
 
         // For emergency calls only, pass the EmergencyCallsOnly string via EXTRA_PLMN
         if (phone.mIsVoiceCapable && mEmergencyOnly && cm.getRadioState().isOn()) {
@@ -626,7 +635,8 @@ public class GsmServiceStateTracker extends ServiceStateTracker {
 
         if (rule != curSpnRule
                 || !TextUtils.equals(spn, curSpn)
-                || !TextUtils.equals(plmn, curPlmn)) {
+                || !TextUtils.equals(plmn, curPlmn)
+                || curState != ssState) {
             boolean showSpn = !mEmergencyOnly && !TextUtils.isEmpty(spn)
                 && (rule & SIMRecords.SPN_RULE_SHOW_SPN) == SIMRecords.SPN_RULE_SHOW_SPN
                 && (ss.getState() == ServiceState.STATE_IN_SERVICE);
@@ -650,6 +660,7 @@ public class GsmServiceStateTracker extends ServiceStateTracker {
         curSpnRule = rule;
         curSpn = spn;
         curPlmn = plmn;
+        curState = ssState;
     }
 
     private int getLacOrTac() {
@@ -734,7 +745,9 @@ public class GsmServiceStateTracker extends ServiceStateTracker {
                             int rejCode = Integer.parseInt(states[13]);
                             // Check if rejCode is "Persistent location update reject",
                             if (rejCode == 10) {
-                                createManagedRoamingDialog();
+                                if (mUiccApplcation != null && mUiccApplcation.getState() == AppState.APPSTATE_READY) {
+                                    createManagedRoamingDialog();
+                                }
                             }
                         } catch (NumberFormatException ex) {
                             Log.w(LOG_TAG, "error parsing regCode: " + ex);

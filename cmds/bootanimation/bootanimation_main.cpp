@@ -88,6 +88,7 @@ int main(int argc, char** argv)
                 client = new BpMediaPlayerClient(binder);
                 player = service->create(getpid(), client, AudioSystem::newAudioSessionId());
                 if (player.get()) {
+                    sleep(2);
                     player->setDataSource(bootanimation_sound_path, NULL);
                     player->start();
                 }

@@ -122,8 +122,9 @@ public class WifiConfiguration implements Parcelable {
     public EnterpriseField key_id = new EnterpriseField("key_id");
     /** {@hide} */
     public EnterpriseField ca_cert = new EnterpriseField("ca_cert");
-
+    /** {@hide} */
     public EnterpriseField pin = new EnterpriseField("pin");
+    /** {@hide} */
     public EnterpriseField pcsc = new EnterpriseField("pcsc");
 
     /** {@hide} */

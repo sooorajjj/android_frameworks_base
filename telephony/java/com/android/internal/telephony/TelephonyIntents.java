@@ -321,4 +321,6 @@ public class TelephonyIntents {
      */
     public static final String ACTION_MANAGED_ROAMING_IND
             = "qualcomm.intent.action.ACTION_MANAGED_ROAMING_IND";
+
+    public static final String ACTION_ENABLE_ENGINEER_MODE = "android.intent.action.ENABLE_ENGINEER_MODE";
 }

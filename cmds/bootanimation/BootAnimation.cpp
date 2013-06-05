@@ -49,12 +49,18 @@
 #include <GLES/glext.h>
 #include <EGL/eglext.h>
 
+#include <media/AudioSystem.h>
+#include <media/mediaplayer.h>
+
 #include "BootAnimation.h"
 
 #define USER_BOOTANIMATION_FILE "/data/local/bootanimation.zip"
 #define SYSTEM_BOOTANIMATION_FILE "/system/media/bootanimation.zip"
 #define SYSTEM_ENCRYPTED_BOOTANIMATION_FILE "/system/media/bootanimation-encrypted.zip"
 #define EXIT_PROP_NAME "service.bootanim.exit"
+
+#define SYSTEM_BOOTSOUND_FILE "/system/media/bootanimation.ogg"
+#define SYSTEM_SHUTSOUND_FILE "/system/media/shutanimation.ogg"
 
 extern "C" int clock_nanosleep(clockid_t clock_id, int flags,
                            const struct timespec *request,
@@ -289,12 +295,41 @@ status_t BootAnimation::readyToRun() {
     return NO_ERROR;
 }
 
+bool BootAnimation::sound()
+{
+    int vol = 5;
+    audio_devices_t device;
+
+    if ((access(SYSTEM_BOOTSOUND_FILE, F_OK))) return false;
+
+    MediaPlayer* mp = new MediaPlayer();
+    if (mp->setDataSource(SYSTEM_BOOTSOUND_FILE, NULL) != NO_ERROR) return false;
+    audio_stream_type_t streamType = AUDIO_STREAM_DEFAULT;
+    //audio_stream_type_t streamType = AUDIO_STREAM_ENFORCED_AUDIBLE;
+
+    mp->setAudioStreamType(streamType);
+    mp->prepare();
+    mp->setLooping(false);
+
+    device = AudioSystem::getDevicesForStream(streamType);
+    AudioSystem::setStreamVolumeIndex(streamType, vol, device);
+    AudioSystem::getStreamVolumeIndex(streamType, &vol, device);
+
+    if (vol) {
+        mp->seekTo(0);
+        mp->start();
+    }
+
+    return true;
+}
+
 bool BootAnimation::threadLoop()
 {
     bool r;
     if (mAndroidAnimation) {
         r = android();
     } else {
+        sound();
         r = movie();
     }
 

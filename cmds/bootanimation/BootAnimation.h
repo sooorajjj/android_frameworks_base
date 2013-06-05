@@ -43,6 +43,7 @@ public:
     virtual     ~BootAnimation();
 
     sp<SurfaceComposerClient> session() const;
+    bool sound();
 
 private:
     virtual bool        threadLoop();

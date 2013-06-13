@@ -519,9 +519,9 @@ class BatteryService extends Binder {
                 String value = args[2];
                 try {
                     boolean update = true;
-                    if ("ac".equals(key)) {
+                    if ("smb347-mains".equals(key)) {
                         mAcOnline = Integer.parseInt(value) != 0;
-                    } else if ("usb".equals(key)) {
+                    } else if ("smb347-usb".equals(key)) {
                         mUsbOnline = Integer.parseInt(value) != 0;
                     } else if ("status".equals(key)) {
                         mBatteryStatus = Integer.parseInt(value);

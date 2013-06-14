@@ -1104,6 +1104,22 @@ class MountService extends IMountService.Stub
                     long maxFileSize = a.getInt(
                             com.android.internal.R.styleable.Storage_maxFileSize, 0) * 1024L * 1024L;
 
+                    if (path.equals(internalPath)) {
+                        removable = false;
+                        emulated = true;
+                        descriptionId = com.android.internal.R.string.storage_internal;
+                        allowMassStorage = true;
+                        mtpReserve = 100;
+                    }
+
+                    if (path.equals(externalPath)) {
+                        removable = true;
+                        emulated = false;
+                        descriptionId = com.android.internal.R.string.storage_sd_card;
+                        allowMassStorage = true;
+                        mtpReserve = 101;
+                    }
+
                     Slog.d(TAG, "got storage path: " + path + " description: " + description +
                             " primary: " + primary + " removable: " + removable +
                             " emulated: " + emulated +  " mtpReserve: " + mtpReserve +

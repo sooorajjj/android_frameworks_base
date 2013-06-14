@@ -1087,12 +1087,6 @@ class MountService extends IMountService.Stub
     private static final String TAG_STORAGE_LIST = "StorageList";
     private static final String TAG_STORAGE = "storage";
 
-    private static final boolean HAS_INTERNAL = SystemProperties.getBoolean("persist.sys.emmcpartition", false);
-    private static final boolean HAS_INTERNAL_ENABLED = SystemProperties.getBoolean("persist.sys.emmcsdcard.enabled", false);
-    private boolean mIsInternalAsPrimary = HAS_INTERNAL && HAS_INTERNAL_ENABLED;
-    private static final String PRIMARY_PATH = "/sdcard";
-    private static final String SECONDARY_PATH = "/udisk";
-
     private void readStorageList() {
         Resources resources = mContext.getResources();
 
@@ -1131,13 +1125,6 @@ class MountService extends IMountService.Stub
                     // resource parser does not support longs, so XML value is in megabytes
                     long maxFileSize = a.getInt(
                             com.android.internal.R.styleable.Storage_maxFileSize, 0) * 1024L * 1024L;
-
-                    if (mIsInternalAsPrimary && path.equals(PRIMARY_PATH)) {
-                        descriptionId = com.android.internal.R.string.storage_internal;
-                    }
-                    if (mIsInternalAsPrimary && path.equals(SECONDARY_PATH)) {
-                        descriptionId = com.android.internal.R.string.storage_sd_card;
-                    }
 
                     Slog.d(TAG, "got storage path: " + path + " description: " + description +
                             " primary: " + primary + " removable: " + removable +

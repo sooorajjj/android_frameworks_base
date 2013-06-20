@@ -2768,7 +2768,7 @@ public class PowerManagerService extends IPowerManager.Stub
         }
 
         // Don't do anything if the screen is off.
-        if ((mPowerState & SCREEN_ON_BIT) == 0) {
+        if ((mPowerState & SCREEN_BRIGHT_BIT) == 0) {
             if (mDebugLightSensor) {
                 Slog.d(TAG, "dropping lightSensorChangedLocked because screen is off");
             }

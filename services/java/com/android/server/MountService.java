@@ -1207,9 +1207,7 @@ class MountService extends IMountService.Stub
         IntentFilter filter = new IntentFilter();
         filter.addAction(Intent.ACTION_BOOT_COMPLETED);
         // don't bother monitoring USB if mass storage is not supported on our primary volume
-        if (mPrimaryVolume != null && mPrimaryVolume.allowMassStorage()) {
-            filter.addAction(UsbManager.ACTION_USB_STATE);
-        }
+        filter.addAction(UsbManager.ACTION_USB_STATE);
         mContext.registerReceiver(mBroadcastReceiver, filter, null, null);
 
         mHandlerThread = new HandlerThread("MountService");

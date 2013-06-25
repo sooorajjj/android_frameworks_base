@@ -475,18 +475,6 @@ public class Environment {
             return Environment.MEDIA_REMOVED;
         }
     }
-    /**
-     *Get the current state of the "internal" storage device
-     */
-    public static String getSecondaryStorageState() {
-        try {
-            IMountService mountService = IMountService.Stub.asInterface(ServiceManager
-                    .getService("mount"));
-            return mountService.getVolumeState(getSecondaryStorageDirectory().toString());
-        } catch (Exception rex) {
-            return Environment.MEDIA_REMOVED;
-        }
-    }
 
     /**
      * Returns whether the primary "external" storage device is removable.

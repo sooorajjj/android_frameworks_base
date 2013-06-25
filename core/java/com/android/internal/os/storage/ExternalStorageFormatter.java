@@ -122,7 +122,7 @@ public class ExternalStorageFormatter extends Service
     public void onCancel(DialogInterface dialog) {
         IMountService mountService = getMountService();
         String extStoragePath = mStorageVolume == null ?
-                Environment.getExternalStorageDirectory().toString() :
+                Environment.getSecondaryStorageDirectory().toString() :
                 mStorageVolume.getPath();
         try {
             mountService.mountVolume(extStoragePath);
@@ -142,14 +142,14 @@ public class ExternalStorageFormatter extends Service
 
     void updateProgressState() {
         String status = mStorageVolume == null ?
-                Environment.getExternalStorageState() :
+                Environment.getSecondaryStorageState() :
                 mStorageManager.getVolumeState(mStorageVolume.getPath());
         if (Environment.MEDIA_MOUNTED.equals(status)
                 || Environment.MEDIA_MOUNTED_READ_ONLY.equals(status)) {
             updateProgressDialog(R.string.progress_unmounting);
             IMountService mountService = getMountService();
             final String extStoragePath = mStorageVolume == null ?
-                    Environment.getExternalStorageDirectory().toString() :
+                    Environment.getSecondaryStorageDirectory().toString() :
                     mStorageVolume.getPath();
             try {
                 // Remove encryption mapping if this is an unmount for a factory reset.
@@ -163,7 +163,7 @@ public class ExternalStorageFormatter extends Service
             updateProgressDialog(R.string.progress_erasing);
             final IMountService mountService = getMountService();
             final String extStoragePath = mStorageVolume == null ?
-                    Environment.getExternalStorageDirectory().toString() :
+                    Environment.getSecondaryStorageDirectory().toString() :
                     mStorageVolume.getPath();
             if (mountService != null) {
                 new Thread() {

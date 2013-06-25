@@ -203,7 +203,7 @@ public class IccProvider extends ContentProvider {
         String emails = null;
         String pin2 = null;
 
-        String[] tokens = where.split("AND");
+        String[] tokens = where.split(" AND ");
         int n = tokens.length;
 
         while (--n >= 0) {
@@ -217,8 +217,8 @@ public class IccProvider extends ContentProvider {
                 continue;
             }
 
-            String key = pair[0].trim();
-            String val = pair[1].trim();
+            String key = pair[0];
+            String val = pair[1];
 
             if (STR_TAG.equals(key)) {
                 tag = normalizeValue(val);

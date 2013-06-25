@@ -1,4 +1,4 @@
-/*
+
  * Copyright (C) 2010 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -324,11 +324,21 @@ public class RecoverySystem {
      */
     public static void installPackage(Context context, File packageFile)
         throws IOException {
-        String filename = packageFile.getCanonicalPath();
-        Log.w(TAG, "!!! REBOOTING TO INSTALL " + filename + " !!!");
-        String arg = "--update_package=" + filename;
-        bootCommand(context, arg);
-    }
+            String filename = packageFile.getCanonicalPath();
+
+            String external = SystemProperties.get("ro.external.sd.path");
+
+            if (filename.startsWith(external))
+                filename = filename.replaceFirst(external, "/sdcard");
+            else {
+                Log.w(TAG, "!!! Installing from storage other than external sdcard"
+                       + " may not be supported by recovery.");
+            }
+            Log.w(TAG, "!!! REBOOTING TO INSTALL " + filename + " !!!");
+            String arg = "--update_package=" + filename +
+                "\n--locale=" + Locale.getDefault().toString();
+            bootCommand(context, arg);
+        }
 
     /**
      * Reboots the device and wipes the user data partition.  This is

@@ -27,6 +27,7 @@ import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.storage.StorageEventListener;
 import android.os.storage.StorageManager;
+import android.os.storage.StorageVolume;
 import android.provider.Settings;
 import android.util.Slog;
 
@@ -175,7 +176,13 @@ public class StorageNotification extends StorageEventListener {
                      * Show safe to unmount media notification, and enable UMS
                      * notification if connected.
                      */
-                    if (Environment.isExternalStorageRemovable()) {
+                    final StorageVolume[] volumes = mStorageManager.getVolumeList();
+                    boolean isstorageremovable = false;
+                    for (StorageVolume volume : volumes) {
+                        if(volume.isRemovable())
+                            isstorageremovable = true;
+                    }
+                    if (isstorageremovable) {
                         setMediaStorageNotification(
                                 com.android.internal.R.string.ext_media_safe_unmount_notification_title,
                                 com.android.internal.R.string.ext_media_safe_unmount_notification_message,

@@ -13133,9 +13133,9 @@ package android.net.wifi {
     enum_constant public static final android.net.wifi.SupplicantState INACTIVE;
     enum_constant public static final android.net.wifi.SupplicantState INTERFACE_DISABLED;
     enum_constant public static final android.net.wifi.SupplicantState INVALID;
+    enum_constant public static final android.net.wifi.SupplicantState KEYFAIL;
     enum_constant public static final android.net.wifi.SupplicantState SCANNING;
     enum_constant public static final android.net.wifi.SupplicantState UNINITIALIZED;
-    enum_constant public static final android.net.wifi.SupplicantState KEYFAIL;
   }
 
   public class WifiConfiguration implements android.os.Parcelable {
@@ -15605,8 +15605,6 @@ package android.os {
     method public static java.io.File getInternalStorageDirectory();
     method public static java.lang.String getInternalStorageState();
     method public static java.io.File getRootDirectory();
-    method public static java.io.File getSecondaryStorageDirectory();
-    method public static java.lang.String getSecondaryStorageState();
     method public static boolean isExternalStorageEmulated();
     method public static boolean isExternalStorageRemovable();
     field public static java.lang.String DIRECTORY_ALARMS;

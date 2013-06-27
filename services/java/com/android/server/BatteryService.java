@@ -340,7 +340,7 @@ class BatteryService extends Binder {
                 mContext.sendBroadcast(statusIntent);
             }
 
-            if (sendBatteryLow) {
+            /*if (sendBatteryLow) {
                 mSentLowBatteryBroadcast = true;
                 statusIntent.setAction(Intent.ACTION_BATTERY_LOW);
                 mContext.sendBroadcast(statusIntent);
@@ -348,7 +348,7 @@ class BatteryService extends Binder {
                 mSentLowBatteryBroadcast = false;
                 statusIntent.setAction(Intent.ACTION_BATTERY_OKAY);
                 mContext.sendBroadcast(statusIntent);
-            }
+            }*/
 
             // Update the battery LED
             mLed.updateLightsLocked();

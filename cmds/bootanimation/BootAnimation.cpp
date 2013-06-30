@@ -62,6 +62,12 @@
 #define SYSTEM_BOOTSOUND_FILE "/system/media/bootanimation.ogg"
 #define SYSTEM_SHUTSOUND_FILE "/system/media/shutanimation.ogg"
 
+#define USER_BOOTANIMATION_PATH "/data/local/"
+#define SYSTEM_BOOTANIMATION_PATH "/system/media/"
+#define BOOTANIMATION_NAME "bootanimation"
+#define BOOTANIMATION_SUFFIX ".zip"
+#define SOUND_SUFFIX ".ogg"
+
 extern "C" int clock_nanosleep(clockid_t clock_id, int flags,
                            const struct timespec *request,
                            struct timespec *remain);
@@ -283,12 +289,7 @@ status_t BootAnimation::readyToRun() {
     if ((encryptedAnimation &&
             (access(SYSTEM_ENCRYPTED_BOOTANIMATION_FILE, R_OK) == 0) &&
             (mZip.open(SYSTEM_ENCRYPTED_BOOTANIMATION_FILE) == NO_ERROR)) ||
-
-            ((access(USER_BOOTANIMATION_FILE, R_OK) == 0) &&
-            (mZip.open(USER_BOOTANIMATION_FILE) == NO_ERROR)) ||
-
-            ((access(SYSTEM_BOOTANIMATION_FILE, R_OK) == 0) &&
-            (mZip.open(SYSTEM_BOOTANIMATION_FILE) == NO_ERROR))) {
+            updateAnimationFileForRes()) {
         mAndroidAnimation = false;
     }
 
@@ -300,10 +301,10 @@ bool BootAnimation::sound()
     int vol = 5;
     audio_devices_t device;
 
-    if ((access(SYSTEM_BOOTSOUND_FILE, F_OK))) return false;
+    if (!updateSoundFileForRes()) return false;
 
     MediaPlayer* mp = new MediaPlayer();
-    if (mp->setDataSource(SYSTEM_BOOTSOUND_FILE, NULL) != NO_ERROR) return false;
+    if (mp->setDataSource(mSoundFile, NULL) != NO_ERROR) return false;
     audio_stream_type_t streamType = AUDIO_STREAM_DEFAULT;
     //audio_stream_type_t streamType = AUDIO_STREAM_ENFORCED_AUDIBLE;
 
@@ -321,6 +322,97 @@ bool BootAnimation::sound()
     }
 
     return true;
+}
+
+bool BootAnimation::getAnimationFileForRes(char *out) {
+    if (!out) return false;
+    if (!updateAnimationFileForRes()) return false;
+    strcpy(out, mAnimationFile);
+    return true;
+}
+
+bool BootAnimation::updateAnimationFileForRes() {
+    return updateAnimationFileForRes(false);
+}
+
+bool BootAnimation::updateAnimationFileForRes(bool update) {
+    if (!update && mAnimationFile[0]) return true;
+    char f[PATH_MAX];
+    updateFileNameForRes(); // update
+    sprintf(f, "%s%s%s", USER_BOOTANIMATION_PATH, mFileNameForRes, BOOTANIMATION_SUFFIX);
+    if (((access(f, R_OK) == 0) && (mZip.open(f) == NO_ERROR))) {
+        strcpy(mAnimationFile, f);
+        return true;
+    }
+    sprintf(f, "%s%s%s", USER_BOOTANIMATION_PATH, BOOTANIMATION_NAME, BOOTANIMATION_SUFFIX);
+    if (((access(f, R_OK) == 0) && (mZip.open(f) == NO_ERROR))) {
+        strcpy(mAnimationFile, f);
+        return true;
+    }
+    sprintf(f, "%s%s%s", SYSTEM_BOOTANIMATION_PATH, mFileNameForRes, BOOTANIMATION_SUFFIX);
+    if (((access(f, R_OK) == 0) && (mZip.open(f) == NO_ERROR))) {
+        strcpy(mAnimationFile, f);
+        return true;
+    }
+    sprintf(f, "%s%s%s", SYSTEM_BOOTANIMATION_PATH, BOOTANIMATION_NAME, BOOTANIMATION_SUFFIX);
+    if (((access(f, R_OK) == 0) && (mZip.open(f) == NO_ERROR))) {
+        strcpy(mAnimationFile, f);
+        return true;
+    }
+    return false;
+}
+
+bool BootAnimation::getSoundFileForRes(char *out) {
+    if (!out) return false;
+    if (!updateSoundFileForRes()) return false;
+    strcpy(out, mSoundFile);
+    return true;
+}
+
+bool BootAnimation::updateSoundFileForRes() {
+    return updateSoundFileForRes(false);
+}
+
+bool BootAnimation::updateSoundFileForRes(bool update) {
+    if (!update && mSoundFile[0]) return true;
+    char f[PATH_MAX];
+    updateFileNameForRes(); // update
+    sprintf(f, "%s%s%s", USER_BOOTANIMATION_PATH, mFileNameForRes, SOUND_SUFFIX);
+    if (!access(f, R_OK)) {
+        strcpy(mSoundFile, f);
+        return true;
+    }
+    sprintf(f, "%s%s%s", USER_BOOTANIMATION_PATH, BOOTANIMATION_NAME, SOUND_SUFFIX);
+    if (!access(f, R_OK)) {
+        strcpy(mSoundFile, f);
+        return true;
+    }
+    sprintf(f, "%s%s%s", SYSTEM_BOOTANIMATION_PATH, mFileNameForRes, SOUND_SUFFIX);
+    if (!access(f, R_OK)) {
+        strcpy(mSoundFile, f);
+        return true;
+    }
+    sprintf(f, "%s%s%s", SYSTEM_BOOTANIMATION_PATH, BOOTANIMATION_NAME, SOUND_SUFFIX);
+    if (!access(f, R_OK)) {
+        strcpy(mSoundFile, f);
+        return true;
+    }
+    return false;
+}
+
+void BootAnimation::getFileNameForRes(char *out) {
+    if (!out) return;
+    updateFileNameForRes();
+    strcpy(out, mFileNameForRes);
+}
+
+void BootAnimation::updateFileNameForRes() {
+    updateFileNameForRes(false);
+}
+
+void BootAnimation::updateFileNameForRes(bool update) {
+    if (!update && mFileNameForRes[0]) return;
+    sprintf(mFileNameForRes, "%s_%dx%d", BOOTANIMATION_NAME, mWidth, mHeight);
 }
 
 bool BootAnimation::threadLoop()

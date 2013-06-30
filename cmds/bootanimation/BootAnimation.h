@@ -83,6 +83,15 @@ private:
     status_t initTexture(void* buffer, size_t len);
     bool android();
     bool movie();
+    bool getAnimationFileForRes(char *out);
+    bool updateAnimationFileForRes();
+    bool updateAnimationFileForRes(bool update);
+    bool getSoundFileForRes(char *out);
+    bool updateSoundFileForRes();
+    bool updateSoundFileForRes(bool update);
+    void getFileNameForRes(char *out);
+    void updateFileNameForRes();
+    void updateFileNameForRes(bool update);
 
     void checkExit();
 
@@ -98,6 +107,9 @@ private:
     sp<Surface> mFlingerSurface;
     bool        mAndroidAnimation;
     ZipFileRO   mZip;
+    char        mFileNameForRes[PATH_MAX];
+    char        mAnimationFile[PATH_MAX];
+    char        mSoundFile[PATH_MAX];
 };
 
 // ---------------------------------------------------------------------------

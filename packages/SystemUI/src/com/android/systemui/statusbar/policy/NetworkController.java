@@ -24,6 +24,7 @@ import java.io.FileDescriptor;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -168,6 +169,8 @@ public class NetworkController extends BroadcastReceiver {
 
     // yuck -- stop doing this here and put it in the framework
     IBatteryStats mBatteryStats;
+
+    private Locale mLocale;
 
     public interface SignalCluster {
         void setWifiIndicators(boolean visible, int strengthIcon, int activityIcon,
@@ -373,6 +376,18 @@ public class NetworkController extends BroadcastReceiver {
             updateConnectivity(intent);
             refreshViews();
         } else if (action.equals(Intent.ACTION_CONFIGURATION_CHANGED)) {
+            final Locale newLocale = mContext.getResources().getConfiguration().locale;
+            if (!newLocale.equals(mLocale)) {
+                mLocale = newLocale;
+                if (mNetworkNameDefault.equals(mNetworkName)) {
+                    mNetworkNameDefault = mContext.getString(
+                        com.android.internal.R.string.lockscreen_carrier_default);
+                    mNetworkName = mNetworkNameDefault;
+                } else {
+                    mNetworkNameDefault = mContext.getString(
+                        com.android.internal.R.string.lockscreen_carrier_default);
+                }
+            }
             refreshViews();
         } else if (action.equals(Intent.ACTION_AIRPLANE_MODE_CHANGED)) {
             updateAirplaneMode();

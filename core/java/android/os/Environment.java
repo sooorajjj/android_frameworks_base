@@ -337,6 +337,11 @@ public class Environment {
         return new File(getExternalStorageDirectory(), type);
     }
 
+    /** {@hide} */
+    public static File getSecondaryStoragePublicDirectory(String type) {
+        return new File(getSecondaryStorageDirectory(), type);
+    }
+
     /**
      * Returns the path for android-specific data on the SD card.
      * @hide

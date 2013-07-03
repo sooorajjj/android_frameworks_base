@@ -117,7 +117,7 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
             int numRecs = mPbrFile.mFileIds.size();
             for (int i = 0; i < numRecs; i++) {
                 readAdnFileAndWait(i);
-                readEmailFileAndWait(i);
+                //readEmailFileAndWait(i);
             }
             // All EF files are loaded, post the response.
         }

@@ -176,6 +176,63 @@ public class IccProvider extends ContentProvider {
         return retVal;
     }
 
+    private String[] parseIccKeyword(String where) {
+        int tokenHeadIndex = -1;
+        int tokenTailIndex = -1;
+        String tagKeyWord = "tag=";
+        String numberKeyWord = " AND number=";
+        String emailsKeyWord = " AND emails=";
+        String pin2KeyWord = " AND PIN2=";
+        String[] returnArray = new String[4];
+        int i;
+        for(i=0;i<4;i++)
+           returnArray[i] = null;
+
+        //parse tag
+        tokenHeadIndex = where.indexOf(tagKeyWord);
+        tokenTailIndex = where.lastIndexOf(numberKeyWord);
+
+        //invalid where string for icc keyword
+        if((tokenHeadIndex==-1)||(tokenTailIndex==-1)) return null;
+
+        //the contact name should between the tokenHeadIndex and tokenTailIndex
+        //tag=ooxoxoxoxo AND number=123556.....
+        //    ^^^^^^^^^^
+        returnArray[0] = where.substring(tokenHeadIndex + tagKeyWord.length(),tokenTailIndex);
+        log("shian debug, tag="+returnArray[0]+"; length of tag is "+returnArray[0].length());
+
+        //parse phone num
+        tokenHeadIndex = where.indexOf(numberKeyWord);
+        tokenTailIndex = where.lastIndexOf(emailsKeyWord);
+        if(tokenTailIndex == -1) tokenTailIndex = where.length();//no email
+
+        //the phone number should between the tokenHeadIndex and tokenTailIndex
+        //tag=ooxoxoxoxo AND number=123556 (AND emails=.....)
+        //                          ^^^^^^
+        returnArray[1] = where.substring(tokenHeadIndex + numberKeyWord.length(),tokenTailIndex);
+        log("shian debug, number="+returnArray[1]+"; length of num is "+returnArray[1].length());
+
+        //parse email
+        tokenHeadIndex = where.indexOf(emailsKeyWord);
+        if(tokenHeadIndex!=-1){
+        //there are email column
+        tokenTailIndex = where.lastIndexOf(pin2KeyWord);
+        if(tokenTailIndex == -1) tokenTailIndex = where.length();//no PIN2
+        returnArray[2] = where.substring(tokenHeadIndex + emailsKeyWord.length(),tokenTailIndex);
+        log("shian debug, emails="+returnArray[2]+"; length of emails is "+returnArray[2].length());
+        }
+
+        //PIN2
+        tokenHeadIndex = where.lastIndexOf(pin2KeyWord);
+        if(tokenHeadIndex!=-1){
+            //there are PIN2 column
+            returnArray[3] = where.substring(tokenHeadIndex + pin2KeyWord.length());
+            log("shian debug, PIN2="+returnArray[3]+"; length of PIN2 is "+returnArray[3].length());
+        }
+
+    return returnArray;
+    }
+
     @Override
     public int delete(Uri url, String where, String[] whereArgs) {
         int efType;
@@ -198,11 +255,16 @@ public class IccProvider extends ContentProvider {
         }
 
         // parse where clause
-        String tag = null;
-        String number = null;
-        String emails = null;
-        String pin2 = null;
+        String[] token = new String[4];
 
+        token = parseIccKeyword(where);
+        if(token == null) return 0;
+
+        String tag = token[0];
+        String number = token[1];
+        String emails = token[2];
+        String pin2 = token[3];
+/*
         String[] tokens = where.split(" AND ");
         int n = tokens.length;
 
@@ -230,7 +292,7 @@ public class IccProvider extends ContentProvider {
                 pin2 = normalizeValue(val);
             }
         }
-
+*/
         /*if (TextUtils.isEmpty(number)) {
             return 0;
         }*/

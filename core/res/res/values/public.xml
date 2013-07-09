@@ -1570,6 +1570,7 @@
   <java-symbol type="string" name="vpn_text_long" />
   <java-symbol type="string" name="vpn_title" />
   <java-symbol type="string" name="vpn_title_long" />
+  <java-symbol type="string" name="usb_charging_notification_title" />
   <java-symbol type="string" name="wallpaper_binding_label" />
   <java-symbol type="style" name="Theme.Dialog.AppError" />
   <java-symbol type="style" name="Theme.Toast" />

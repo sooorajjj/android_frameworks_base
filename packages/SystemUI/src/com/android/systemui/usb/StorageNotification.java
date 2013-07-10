@@ -28,6 +28,7 @@ import android.os.HandlerThread;
 import android.os.storage.StorageEventListener;
 import android.os.storage.StorageManager;
 import android.os.storage.StorageVolume;
+import android.os.SystemClock;
 import android.provider.Settings;
 import android.util.Slog;
 
@@ -236,6 +237,9 @@ public class StorageNotification extends StorageEventListener {
              * Storage has been removed. Show nomedia media notification,
              * and disable UMS notification regardless of connection state.
              */
+            if (oldState.equals(Environment.MEDIA_UNMOUNTED)){
+                setMediaStorageNotification(0, 0, 0, false, false, null);
+                SystemClock.sleep(200);}
             setMediaStorageNotification(
                     com.android.internal.R.string.ext_media_nomedia_notification_title,
                     com.android.internal.R.string.ext_media_nomedia_notification_message,
@@ -247,6 +251,9 @@ public class StorageNotification extends StorageEventListener {
              * Storage has been removed unsafely. Show bad removal media notification,
              * and disable UMS notification regardless of connection state.
              */
+            if (oldState.equals(Environment.MEDIA_UNMOUNTED)){
+                setMediaStorageNotification(0, 0, 0, false, false, null);
+                SystemClock.sleep(200);}
             setMediaStorageNotification(
                     com.android.internal.R.string.ext_media_badremoval_notification_title,
                     com.android.internal.R.string.ext_media_badremoval_notification_message,
@@ -365,7 +372,6 @@ public class StorageNotification extends StorageEventListener {
     private synchronized void setMediaStorageNotification(int titleId, int messageId, int icon, boolean visible,
                                                           boolean dismissable, PendingIntent pi) {
 
-        if (hasMtpSettings()) return;
         if (!visible && mMediaStorageNotification == null) {
             return;
         }

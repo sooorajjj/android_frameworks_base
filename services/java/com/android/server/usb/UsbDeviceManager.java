@@ -117,6 +117,8 @@ public class UsbDeviceManager {
     private Map<String, List<Pair<String, String>>> mOemModeMap;
     private String[] mAccessoryStrings;
 
+    private StorageManager mStorageManager = null;
+
     private class AdbSettingsObserver extends ContentObserver {
         public AdbSettingsObserver() {
             super(null);
@@ -618,6 +620,20 @@ public class UsbDeviceManager {
             return mCurrentAccessory;
         }
 
+        private void mountMassStorage() {
+            if (mStorageManager == null) {
+                mStorageManager = (StorageManager) mContext.getSystemService(Context.STORAGE_SERVICE);
+                if (mStorageManager == null) {
+                    Slog.e(TAG, "Failed to get StorageManager");
+                    return;
+                }
+            }
+
+            if (mStorageManager.isUsbMassStorageConnected()) {
+                mStorageManager.enableUsbMassStorage();
+            }
+        }
+
         private void updateUsbNotification() {
             if (mNotificationManager == null || !mUseUsbNotification) return;
             int id = 0;
@@ -633,7 +649,8 @@ public class UsbDeviceManager {
                     id = com.android.internal.R.string.usb_ptp_notification_title;
                 } else if (containsFunction(mCurrentFunctions,
                         UsbManager.USB_FUNCTION_MASS_STORAGE)) {
-                    id = com.android.internal.R.string.usb_cd_installer_notification_title;
+                    //id = com.android.internal.R.string.usb_cd_installer_notification_title;
+                    mountMassStorage();
                 } else if (containsFunction(mCurrentFunctions, UsbManager.USB_FUNCTION_ACCESSORY)) {
                     id = com.android.internal.R.string.usb_accessory_notification_title;
                 } else {

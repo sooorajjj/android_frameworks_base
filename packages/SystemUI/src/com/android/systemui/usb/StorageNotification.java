@@ -140,7 +140,8 @@ public class StorageNotification extends StorageEventListener {
                     com.android.internal.R.string.usb_storage_stop_notification_title,
                     com.android.internal.R.string.usb_storage_stop_notification_message,
                     com.android.internal.R.drawable.stat_sys_warning, false, true, pi);
-        } else if (newState.equals(Environment.MEDIA_CHECKING)) {
+                  
+           } else if (newState.equals(Environment.MEDIA_CHECKING)) {
             /*
              * Storage is now checking. Update media notification and disable
              * UMS notification.
@@ -284,6 +285,7 @@ public class StorageNotification extends StorageEventListener {
     private synchronized void setUsbStorageNotification(int titleId, int messageId, int icon,
             boolean sound, boolean visible, PendingIntent pi) {
 
+        if (hasMtpSettings()) return;
         if (!visible && mUsbStorageNotification == null) {
             return;
         }
@@ -363,6 +365,7 @@ public class StorageNotification extends StorageEventListener {
     private synchronized void setMediaStorageNotification(int titleId, int messageId, int icon, boolean visible,
                                                           boolean dismissable, PendingIntent pi) {
 
+        if (hasMtpSettings()) return;
         if (!visible && mMediaStorageNotification == null) {
             return;
         }
@@ -418,4 +421,9 @@ public class StorageNotification extends StorageEventListener {
             notificationManager.cancel(notificationId);
         }
     }
+    
+    public boolean hasMtpSettings() {
+        // If MASS_STORAGE MOUNT-SETTING IS IN SETTING
+            return true;
+        }
 }

@@ -1544,7 +1544,10 @@ public class Instrumentation {
               //              + "; have you declared this activity in your AndroidManifest.xml?");
               //  throw new ActivityNotFoundException(
               //          "No Activity found to handle " + intent);
-                Log.d(TAG, ((Intent)intent).getComponent().toShortString() + " does not exist or been disabled.");
+                if (intent instanceof Intent && ((Intent)intent).getComponent() != null)
+                   Log.d(TAG, ((Intent)intent).getComponent().toShortString() + " does not exist or has been disabled.");
+                else
+                   Log.d(TAG," The called activity does not exist or has been disabled.");
                 break;
             case ActivityManager.START_PERMISSION_DENIED:
                 throw new SecurityException("Not allowed to start activity "

@@ -1537,13 +1537,15 @@ public class Instrumentation {
         switch (res) {
             case ActivityManager.START_INTENT_NOT_RESOLVED:
             case ActivityManager.START_CLASS_NOT_FOUND:
-                if (intent instanceof Intent && ((Intent)intent).getComponent() != null)
-                    throw new ActivityNotFoundException(
-                            "Unable to find explicit activity class "
-                            + ((Intent)intent).getComponent().toShortString()
-                            + "; have you declared this activity in your AndroidManifest.xml?");
-                throw new ActivityNotFoundException(
-                        "No Activity found to handle " + intent);
+              //  if (intent instanceof Intent && ((Intent)intent).getComponent() != null)
+              //      throw new ActivityNotFoundException(
+              //              "Unable to find explicit activity class "
+              //              + ((Intent)intent).getComponent().toShortString()
+              //              + "; have you declared this activity in your AndroidManifest.xml?");
+              //  throw new ActivityNotFoundException(
+              //          "No Activity found to handle " + intent);
+                Log.d(TAG, ((Intent)intent).getComponent().toShortString() + " does not exist or been disabled.");
+                break;
             case ActivityManager.START_PERMISSION_DENIED:
                 throw new SecurityException("Not allowed to start activity "
                         + intent);

@@ -65,6 +65,7 @@ public class ContentType {
     public static final String AUDIO_3GPP        = "audio/3gpp";
     public static final String AUDIO_X_WAV       = "audio/x-wav";
     public static final String AUDIO_OGG         = "application/ogg";
+    public static final String AUDIO_IMY         = "audio/imy";
 
     public static final String VIDEO_UNSPECIFIED = "video/*";
     public static final String VIDEO_3GPP        = "video/3gpp";
@@ -119,6 +120,7 @@ public class ContentType {
         sSupportedContentTypes.add(AUDIO_X_WAV);
         sSupportedContentTypes.add(AUDIO_3GPP);
         sSupportedContentTypes.add(AUDIO_OGG);
+        sSupportedContentTypes.add(AUDIO_IMY);
 
         sSupportedContentTypes.add(VIDEO_3GPP);
         sSupportedContentTypes.add(VIDEO_3G2);
@@ -163,6 +165,7 @@ public class ContentType {
         sSupportedAudioTypes.add(AUDIO_X_WAV);
         sSupportedAudioTypes.add(AUDIO_3GPP);
         sSupportedAudioTypes.add(AUDIO_OGG);
+        sSupportedAudioTypes.add(AUDIO_IMY);
 
         // add supported video types
         sSupportedVideoTypes.add(VIDEO_3GPP);

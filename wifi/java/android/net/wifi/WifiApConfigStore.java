@@ -203,6 +203,7 @@ class WifiApConfigStore extends StateMachine {
     private void setDefaultApConfiguration() {
         WifiConfiguration config = new WifiConfiguration();
         config.SSID = mContext.getString(R.string.wifi_tether_configure_ssid_default);
+        if (android.text.TextUtils.isEmpty(config.SSID)) config.SSID = android.os.Build.MODEL;
         config.allowedKeyManagement.set(KeyMgmt.WPA2_PSK);
         String randomUUID = UUID.randomUUID().toString();
         //first 12 chars from xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx

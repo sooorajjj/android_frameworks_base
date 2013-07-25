@@ -16,6 +16,7 @@
 
 package com.android.systemui.statusbar.policy;
 
+import android.app.ActivityManager;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.os.AsyncTask;
@@ -75,6 +76,8 @@ public class BrightnessController implements ToggleSlider.Listener {
     }
 
     public void onChanged(ToggleSlider view, boolean tracking, boolean automatic, int value) {
+        if (ActivityManager.isUserAMonkey()) return;
+
         setMode(automatic ? Settings.System.SCREEN_BRIGHTNESS_MODE_AUTOMATIC
                 : Settings.System.SCREEN_BRIGHTNESS_MODE_MANUAL);
         if (!automatic) {

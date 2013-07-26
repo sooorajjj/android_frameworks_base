@@ -44,6 +44,11 @@ import android.widget.SeekBar.OnSeekBarChangeListener;
 
 import java.util.HashMap;
 
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.PrintWriter;
+
 /**
  * Handle the volume up and down keys.
  *
@@ -574,8 +579,29 @@ public class VolumePanel extends Handler implements OnSeekBarChangeListener, Vie
 
     protected void onShowVolumeChanged(int streamType, int flags) {
         int index = getStreamVolume(streamType);
+		int n = 0;
+		int lock = 0;
+		final String filename = "/sys/class/switch/hdmi/state";
 
-        mRingIsSilent = false;
+		FileReader reader = null;
+		try{
+			reader = new FileReader(filename);
+			char[] buf = new char[15];
+			n = reader.read(buf);
+			if(Integer.valueOf(buf[0]) == 49){
+				lock = 1;
+			}
+		}catch (IOException ex) {
+			Log.d(TAG, "Couldn't read hdmi state ");
+		}catch (NumberFormatException ex) {
+			Log.d(TAG, "Couldn't read hdmi state ");
+		}finally {
+			try {
+				reader.close();
+			} catch (IOException ex) {
+			}
+		}
+		mRingIsSilent = false;
 
         if (LOGD) {
             Log.d(TAG, "onShowVolumeChanged(streamType: " + streamType
@@ -671,6 +697,7 @@ public class VolumePanel extends Handler implements OnSeekBarChangeListener, Vie
             }
         }
 
+
         if (!mDialog.isShowing()) {
             int stream = (streamType == AudioService.STREAM_REMOTE_MUSIC) ? -1 : streamType;
             // when the stream is for remote playback, use -1 to reset the stream type evaluation
@@ -680,7 +707,8 @@ public class VolumePanel extends Handler implements OnSeekBarChangeListener, Vie
             if (mShowCombinedVolumes) {
                 collapse();
             }
-            mDialog.show();
+			if(lock == 0){
+				mDialog.show();}
         }
 
         // Do a little vibrate if applicable (only when going into vibrate mode)

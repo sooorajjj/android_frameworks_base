@@ -652,12 +652,15 @@ public class UsbDeviceManager {
                     id = com.android.internal.R.string.usb_cd_installer_notification_title;
                     mountMassStorage();
                 } else if (containsFunction(mCurrentFunctions, UsbManager.USB_FUNCTION_ACCESSORY)) {
-                    id = com.android.internal.R.string.usb_accessory_notification_title;
+                    //id = com.android.internal.R.string.usb_accessory_notification_title;
+                        id = com.android.internal.R.string.usb_charging_notification_title;
+                    
                 } else {
                     // There is a different notification for USB tethering so we don't need one here
                     if (!containsFunction(mCurrentFunctions, UsbManager.USB_FUNCTION_RNDIS)) {
                         Slog.e(TAG, "No known USB function in updateUsbNotification");
-                        id = com.android.internal.R.string.usb_accessory_notification_title;
+                        //id = com.android.internal.R.string.usb_accessory_notification_title;
+                        id = com.android.internal.R.string.usb_charging_notification_title;
                     }
                 }
             }

@@ -468,6 +468,20 @@ public class Environment {
             return Environment.MEDIA_REMOVED;
         }
     }
+
+    /**
+     * @hide
+     */
+    public static String getSdCardState() {
+        try {
+            IMountService mountService = IMountService.Stub.asInterface(ServiceManager
+                    .getService("mount"));
+            return mountService.getVolumeState("/storage/sdcard1");
+        } catch (Exception rex) {
+            return Environment.MEDIA_REMOVED;
+        }
+    }
+
     /**
      *Get the current state of the "internal" storage device
      */

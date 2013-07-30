@@ -42,6 +42,7 @@ import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.ViewConfiguration;
 import android.view.Window;
+import android.app.ActivityManager;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -1537,18 +1538,21 @@ public class Instrumentation {
         switch (res) {
             case ActivityManager.START_INTENT_NOT_RESOLVED:
             case ActivityManager.START_CLASS_NOT_FOUND:
-              //  if (intent instanceof Intent && ((Intent)intent).getComponent() != null)
-              //      throw new ActivityNotFoundException(
-              //              "Unable to find explicit activity class "
-              //              + ((Intent)intent).getComponent().toShortString()
-              //              + "; have you declared this activity in your AndroidManifest.xml?");
-              //  throw new ActivityNotFoundException(
-              //          "No Activity found to handle " + intent);
-                if (intent instanceof Intent && ((Intent)intent).getComponent() != null)
-                   Log.d(TAG, ((Intent)intent).getComponent().toShortString() + " does not exist or has been disabled.");
-                else
-                   Log.d(TAG," The called activity does not exist or has been disabled.");
-                break;
+                if (ActivityManager.isUserAMonkey()){
+                    if (intent instanceof Intent && ((Intent)intent).getComponent() != null)
+                        Log.d(TAG, ((Intent)intent).getComponent().toShortString() + " does not exist or has been disabled.");
+                    else
+                        Log.d(TAG," The called activity does not exist or has been disabled.");
+                    break;
+                }else{
+                    if (intent instanceof Intent && ((Intent)intent).getComponent() != null)
+                        throw new ActivityNotFoundException(
+                                "Unable to find explicit activity class "
+                                + ((Intent)intent).getComponent().toShortString()
+                                + "; have you declared this activity in your AndroidManifest.xml?");
+                        throw new ActivityNotFoundException(
+                                "No Activity found to handle " + intent);
+                }
             case ActivityManager.START_PERMISSION_DENIED:
                 throw new SecurityException("Not allowed to start activity "
                         + intent);

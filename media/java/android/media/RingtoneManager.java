@@ -399,10 +399,15 @@ public class RingtoneManager {
             return null;
         }
         
-        return getUriFromCursor(mCursor);
+        return getUriFromCursor(mCursor); 
     }
     
-    private static Uri getUriFromCursor(Cursor cursor) {
+    private static Uri getUriFromCursor(Cursor cursor) { ////PEDRO
+	if (cursor == null || cursor.isClosed()) {
+	    Log.e(TAG,"error cursor is closed or null");
+            return null;
+        }
+	
         return ContentUris.withAppendedId(Uri.parse(cursor.getString(URI_COLUMN_INDEX)), cursor
                 .getLong(ID_COLUMN_INDEX));
     }

@@ -47,7 +47,9 @@ import static android.net.NetworkTemplate.MATCH_ETHERNET;
 import static android.net.NetworkTemplate.MATCH_MOBILE_3G_LOWER;
 import static android.net.NetworkTemplate.MATCH_MOBILE_4G;
 import static android.net.NetworkTemplate.MATCH_MOBILE_ALL;
+import static android.net.NetworkTemplate.MATCH_MOBILE_WILDCARD;
 import static android.net.NetworkTemplate.MATCH_WIFI;
+import static android.net.NetworkTemplate.MATCH_WIFI_WILDCARD;
 import static android.net.NetworkTemplate.buildTemplateMobileAll;
 import static android.net.TrafficStats.MB_IN_BYTES;
 import static android.net.wifi.WifiInfo.removeDoubleQuotes;
@@ -905,6 +907,7 @@ public class NetworkPolicyManagerService extends INetworkPolicyManager.Stub {
             case MATCH_MOBILE_3G_LOWER:
             case MATCH_MOBILE_4G:
             case MATCH_MOBILE_ALL:
+            case MATCH_MOBILE_WILDCARD:
                 // TODO: offer more granular control over radio states once
                 // 4965893 is available.
                 if (tele.getSimState() == SIM_STATE_READY
@@ -913,6 +916,7 @@ public class NetworkPolicyManagerService extends INetworkPolicyManager.Stub {
                     setPolicyDataEnable(TYPE_WIMAX, enabled);
                 }
                 break;
+            case MATCH_WIFI_WILDCARD:
             case MATCH_WIFI:
                 setPolicyDataEnable(TYPE_WIFI, enabled);
                 break;

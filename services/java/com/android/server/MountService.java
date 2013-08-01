@@ -758,6 +758,7 @@ class MountService extends IMountService.Stub
                 minor = Integer.parseInt(devTok[1]);
             } catch (Exception ex) {
                 Slog.e(TAG, "Failed to parse major/minor", ex);
+                return false;
             }
 
             if (code == VoldResponseCode.VolumeDiskInserted) {

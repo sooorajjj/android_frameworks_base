@@ -402,14 +402,20 @@ public class RingtoneManager {
         return getUriFromCursor(mCursor); 
     }
     
-    private static Uri getUriFromCursor(Cursor cursor) { ////PEDRO
-	if (cursor == null || cursor.isClosed()) {
-	    Log.e(TAG,"error cursor is closed or null");
-            return null;
+    private static Uri getUriFromCursor(Cursor cursor) { //Giga
+	Uri mUri = null;
+	try {
+            mUri = ContentUris.withAppendedId(Uri.parse(cursor.getString(URI_COLUMN_INDEX)), cursor.getLong(ID_COLUMN_INDEX));
+        } catch (Exception ex) {
+            Log.e(TAG, "Error Accessing to cursor : " + ex);
+            if (cursor == null || !cursor.moveToFirst()) {
+	    	Log.e(TAG,"error cursor is closed or null");
+            	return null;
+            }
+	    mUri = ContentUris.withAppendedId(Uri.parse(cursor.getString(URI_COLUMN_INDEX)), cursor.getLong(ID_COLUMN_INDEX)); 	  
         }
 	
-        return ContentUris.withAppendedId(Uri.parse(cursor.getString(URI_COLUMN_INDEX)), cursor
-                .getLong(ID_COLUMN_INDEX));
+        return mUri;
     }
     
     /**

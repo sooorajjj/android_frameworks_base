@@ -476,7 +476,7 @@ public class BluetoothA2dpService extends IBluetoothA2dp.Stub {
                 mDuration = String.valueOf(intent.getIntExtra("duration", 0));
                 mPosition = intent.getIntExtra("position", 0);
                 int playStatus = intent.getIntExtra("playstate", 0);
-                log("PlaySatus is " + playStatus);
+                if (DBG) log("PlaySatus is " + playStatus);
 
                 if (playStatus != mPlayStatus) {
                     mPlayStatus = playStatus;
@@ -485,13 +485,15 @@ public class BluetoothA2dpService extends IBluetoothA2dp.Stub {
                     }
                 }
 
-                log("Metadata received");
-                log("Duration " + mDuration);
-                log("position " + mPosition);
-                log("playstate is " + mPlayStatus);
+                if (DBG) {
+                    log("Metadata received");
+                    log("Duration " + mDuration);
+                    log("position " + mPosition);
+                    log("playstate is " + mPlayStatus);
+                }
 
                 if (uri.equals(mUri)) {
-                    log("Update for same Uri, ignoring");
+                    if(DBG) log("Update for same Uri, ignoring");
                     return;
                 }
 
@@ -518,23 +520,25 @@ public class BluetoothA2dpService extends IBluetoothA2dp.Stub {
                     long mediaNumber = mCursor.getLong(
                         mCursor.getColumnIndexOrThrow(MediaStore.Audio.Media._ID));
                     mMediaNumber = String.valueOf(mediaNumber);
-                    log("Title is " + mTrackName);
-                    log("Artist is " + mArtistName);
-                    log("Album is " + mAlbumName);
-                    log("ID is " + mMediaNumber);
+                    if (DBG) {
+                        log("Title is " + mTrackName);
+                        log("Artist is " + mArtistName);
+                        log("Album is " + mAlbumName);
+                        log("ID is " + mMediaNumber);
+                    }
                     mCursor.close();
                     mCursor = null;
                     Long tmpId = (Long)getTrackId(mTrackName);
-                    log("tmpId is " + tmpId);
+                    if (DBG) log("tmpId is " + tmpId);
                     mMediaNumber = String.valueOf(tmpId);
-                    log("ID is " + mMediaNumber);
+                    if (DBG) log("ID is " + mMediaNumber);
                     if (!tempMediaNumber.equals(mMediaNumber)) {
                         /* file change happened */
                         MediaMetadataRetriever mmr = new MediaMetadataRetriever();
                         mmr.setDataSource(mContext, mUri);
                         temp = mmr.extractMetadata(mmr.METADATA_KEY_GENRE);
                         mGenre = getValidUtf8String(temp);
-                        log("Genre is " + mGenre);
+                        if (DBG) log("Genre is " + mGenre);
                     }
                     mCursor = mContext.getContentResolver().query(
                                             MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
@@ -544,7 +548,7 @@ public class BluetoothA2dpService extends IBluetoothA2dp.Stub {
                     mMediaCount = String.valueOf(mCursor.getCount());
                     mCursor.close();
                     mCursor = null;
-                    log("Track count is " + mMediaCount);
+                    if (DBG) log("Track count is " + mMediaCount);
                 } catch(Exception e) {
                     log("Exc is " + e);
                     // e.printStackTrace(); for debugging enable this
@@ -557,7 +561,7 @@ public class BluetoothA2dpService extends IBluetoothA2dp.Stub {
                     mGenre = null;
                 }
 
-                log("end of parsing mData");
+                if (DBG) log("end of parsing mData");
                 for (String path: getConnectedSinksPaths()) {
                     sendMetaData(path);
                     sendEvent(path, EVENT_TRACK_CHANGED, Long.valueOf(mMediaNumber));

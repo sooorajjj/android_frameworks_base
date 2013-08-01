@@ -65,12 +65,13 @@ public class StorageNotification extends StorageEventListener {
     private StorageManager mStorageManager;
 
     private Handler        mAsyncEventHandler;
-
+    private boolean USBconnected;
     public StorageNotification(Context context) {
         mContext = context;
 
         mStorageManager = (StorageManager) context.getSystemService(Context.STORAGE_SERVICE);
         final boolean connected = mStorageManager.isUsbMassStorageConnected();
+		USBconnected = connected;
         Slog.d(TAG, String.format( "Startup with UMS connection %s (media state %s)", mUmsAvailable,
                 Environment.getExternalStorageState()));
         
@@ -89,6 +90,7 @@ public class StorageNotification extends StorageEventListener {
         mAsyncEventHandler.post(new Runnable() {
             @Override
             public void run() {
+            USBconnected = connected;
                 onUsbMassStorageConnectionChangedAsync(connected);
             }
         });
@@ -100,6 +102,7 @@ public class StorageNotification extends StorageEventListener {
          * Even though we may have a UMS host connected, we the SD card
          * may not be in a state for export.
          */
+         USBconnected = connected;
         String st = Environment.getExternalStorageState();
         String sti = Environment.getInternalStorageState();
         Slog.i(TAG, String.format("UMS connection(/storage/sdcard0) changed to %s (media state %s)",connected, st));
@@ -166,7 +169,7 @@ public class StorageNotification extends StorageEventListener {
              * want to display the 'safe to unmount' notification.
              */
             if (!mStorageManager.isUsbMassStorageEnabled()) {
-                if (oldState.equals(Environment.MEDIA_SHARED)) {
+                 if (oldState.equals(Environment.MEDIA_SHARED)) {
                     /*
                      * The unmount was due to UMS being enabled. Dismiss any
                      * media notifications, and enable UMS notification if connected
@@ -185,12 +188,15 @@ public class StorageNotification extends StorageEventListener {
                             isstorageremovable = true;
                     }
                     if (isstorageremovable) {
-                        setMediaStorageNotification(
+                              if(!USBconnected)
+                              {
+				    setMediaStorageNotification(
                                 com.android.internal.R.string.ext_media_safe_unmount_notification_title,
                                 com.android.internal.R.string.ext_media_safe_unmount_notification_message,
                                 com.android.internal.R.drawable.stat_notify_sdcard, true, true, null);
+                               }
                     } else {
-                        // This device does not have removable storage, so
+                         // This device does not have removable storage, so
                         // don't tell the user they can remove it.
                         setMediaStorageNotification(0, 0, 0, false, false, null);
                     }

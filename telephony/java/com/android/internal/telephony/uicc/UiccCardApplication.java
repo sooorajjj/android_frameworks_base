@@ -646,7 +646,7 @@ public class UiccCardApplication {
              Message onComplete) {
          if (DBG) log("Change Pin1 old: " + oldPassword + " new: " + newPassword);
          mCi.changeIccPinForApp(oldPassword, newPassword, mAid,
-                 onComplete);
+                 mHandler.obtainMessage(EVENT_CHANGE_PIN1_DONE, onComplete));
 
      }
 

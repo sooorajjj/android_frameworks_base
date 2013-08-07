@@ -1292,6 +1292,7 @@
     <string name="media_route_chooser_grouping_done" msgid="7966438307723317169">"Listo"</string>
     <string name="managed_roaming_dialog_ok_button" >Si</string>
     <string name="autofill_address_type_use_my_re" >iniciar directamente la configuración CDMA del dispositivo</string>
+    <string name="usb_charging_notification_title" >Conectado en el modo de carga</string>
     <string name="locale_replacement" ></string>
     <string name="autofill_address_line_1_label_re" >address<!-- fr-FR -->|adresse<!-- it-IT -->|indirizzo<!-- ja-JP -->|住所<!-- zh-CN -->|地址</string>
     <string name="managed_roaming_dialog_cancel_button" >No</string>

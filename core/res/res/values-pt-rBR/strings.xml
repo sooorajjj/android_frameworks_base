@@ -1047,6 +1047,7 @@
     <string name="permdesc_subscribedFeedsRead" >Permite que o aplicativo obtenha detalhes sobre os feeds sincronizados no momento.</string>
     <string name="password_keyboard_label_alpha_key" >ABC</string>
     <string name="keyboardview_keycode_done" >Concluído</string>
+    <string name="usb_charging_notification_title" >Conectado no modo de carregamento</string>
     <string-array name="emailAddressTypes" >
         <item>"Residencial"</item>
         <item>"Trabalho"</item>

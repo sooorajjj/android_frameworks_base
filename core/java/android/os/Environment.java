@@ -128,6 +128,10 @@ public class Environment {
 
     private static final File EXTERNAL_STORAGE_DIRECTORY
             = getDirectory("EXTERNAL_STORAGE", "/storage/sdcard0");
+
+    private static final File SD_STORAGE_DIRECTORY
+            = getDirectory("SD_CARD", "/storage/sdcard1");
+
     /*support internel storage*/
     private static final File INTERNAL_STORAGE_DIRECTORY
             = getDirectory("INTERNAL_STORAGE", "/storage/sdcard1");
@@ -199,6 +203,10 @@ public class Environment {
 
     public static File getInternalStorageDirectory() {
         return INTERNAL_STORAGE_DIRECTORY;
+    }
+
+    public static File getSdCardDirectory() {
+        return SD_STORAGE_DIRECTORY;
     }
 
     /** {@hide} */

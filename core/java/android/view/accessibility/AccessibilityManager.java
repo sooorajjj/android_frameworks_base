@@ -228,7 +228,12 @@ public final class AccessibilityManager {
                 Log.i(LOG_TAG, event + " sent");
             }
         } catch (RemoteException re) {
-            Log.e(LOG_TAG, "Error during sending " + event + " ", re);
+            // just in case event.toString() is too long , show event type instead of event to avoid OOM exception
+            try {
+                Log.e(LOG_TAG, "Error during sending " + event + " ", re);
+            } catch (Exception e){
+                Log.e(LOG_TAG, "Error during sending event which type :" + event.getEventType() + " ",e);
+            }
         } finally {
             if (doRecycle) {
                 event.recycle();

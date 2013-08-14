@@ -2311,7 +2311,7 @@ public abstract class AbsListView extends AdapterView<ListAdapter> implements Te
             final int position = getPositionForView(host);
             final ListAdapter adapter = getAdapter();
 
-            if ((position == INVALID_POSITION) || (adapter == null)) {
+            if ((position == INVALID_POSITION) || (adapter == null) || (adapter.isEmpty())) {
                 return;
             }
 

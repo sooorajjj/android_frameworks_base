@@ -68,6 +68,7 @@ import static com.android.server.NetworkManagementService.LIMIT_GLOBAL_ALERT;
 import static com.android.server.NetworkManagementSocketTagger.resetKernelUidStats;
 import static com.android.server.NetworkManagementSocketTagger.setKernelCounterSet;
 
+import android.app.ActivityManager;
 import android.app.AlarmManager;
 import android.app.IAlarmManager;
 import android.app.PendingIntent;
@@ -909,7 +910,8 @@ public class NetworkStatsService extends INetworkStatsService.Stub {
             mWakeLock.acquire();
 
             // try refreshing time source when stale
-            if (mTime.getCacheAge() > mSettings.getTimeCacheMaxAge()) {
+            if (!ActivityManager.isUserAMonkey()
+                && mTime.getCacheAge() > mSettings.getTimeCacheMaxAge()) {
                 mTime.forceRefresh();
             }
 

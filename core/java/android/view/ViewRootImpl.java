@@ -582,6 +582,8 @@ public final class ViewRootImpl implements ViewParent,
                     setAccessibilityFocus(null, null);
                     switch (res) {
                         case WindowManagerImpl.ADD_BAD_APP_TOKEN:
+                            if (attrs.type == attrs.TYPE_INPUT_METHOD)
+                                return;
                         case WindowManagerImpl.ADD_BAD_SUBWINDOW_TOKEN:
                             throw new WindowManagerImpl.BadTokenException(
                                 "Unable to add window -- token " + attrs.token

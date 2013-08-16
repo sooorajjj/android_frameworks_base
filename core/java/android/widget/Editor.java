@@ -93,6 +93,7 @@ import android.widget.Editor.InputMethodState;
 import android.widget.Editor.SelectionModifierCursorController;
 import android.widget.TextView.Drawables;
 import android.widget.TextView.OnEditorActionListener;
+import android.app.ActivityManager;
 
 import java.text.BreakIterator;
 import java.util.Arrays;
@@ -194,7 +195,8 @@ public class Editor {
 
     void onAttachedToWindow() {
         if (mShowErrorAfterAttach) {
-            showError();
+            if((mError != null) || !ActivityManager.isUserAMonkey())
+              showError();
             mShowErrorAfterAttach = false;
         }
         mTemporaryDetach = false;

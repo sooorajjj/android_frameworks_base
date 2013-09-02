@@ -33,6 +33,7 @@ import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlSerializer;
 
+import android.app.ActivityManager;
 import android.app.ActivityManagerNative;
 import android.app.AlertDialog;
 import android.app.KeyguardManager;
@@ -3143,9 +3144,13 @@ public class InputMethodManagerService extends IInputMethodManager.Stub
                                     subtype.overridesImplicitlyEnabledSubtype() ? null
                                             : subtype.getDisplayName(mContext, imi.getPackageName(),
                                                     imi.getServiceInfo().applicationInfo);
-                            imList.add(new ImeSubtypeListItem(imeLabel, subtypeLabel, imi, j,
-                                    subtype.getLocale(), mSystemLocaleStr));
-
+                            if (!imeLabel.equals("Google voice typing") && ActivityManager.isUserAMonkey()) {
+                                imList.add(new ImeSubtypeListItem(imeLabel, subtypeLabel, imi, j,
+                                        subtype.getLocale(), mSystemLocaleStr));
+                            }else{
+                                    imList.add(new ImeSubtypeListItem(imeLabel, subtypeLabel, imi, j,
+                                            subtype.getLocale(), mSystemLocaleStr));
+                            }
                             // Removing this subtype from enabledSubtypeSet because we no longer
                             // need to add an entry of this subtype to imList to avoid duplicated
                             // entries.

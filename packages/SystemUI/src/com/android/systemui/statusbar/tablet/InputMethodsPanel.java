@@ -18,6 +18,7 @@ package com.android.systemui.statusbar.tablet;
 
 import com.android.systemui.R;
 
+import android.app.ActivityManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -293,7 +294,11 @@ public class InputMethodsPanel extends LinearLayout implements StatusBarPanel,
                 continue;
             }
             for (InputMethodSubtype subtype: subtypes) {
-                mInputMethodMenuList.addView(createInputMethodItem(imi, subtype));
+                if (!getIMIName(imi).equals("Google voice typing") && ActivityManager.isUserAMonkey()){
+                    mInputMethodMenuList.addView(createInputMethodItem(imi, subtype));
+                }else{
+                      mInputMethodMenuList.addView(createInputMethodItem(imi, subtype));
+                }
             }
         }
         updateRadioButtons();

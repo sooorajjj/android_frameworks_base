@@ -1470,7 +1470,6 @@ class BackupManagerService extends IBackupManager.Stub {
             // if it's the last participating app under this uid we drop the
             // (now-empty) set as well.
             if (MORE_DEBUG) Slog.v(TAG, "  removing participant " + packageName);
-            removeEverBackedUp(packageName);
             set.remove(packageName);
         }
     }

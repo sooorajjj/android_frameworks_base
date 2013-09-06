@@ -161,7 +161,11 @@ public class HeaderViewListAdapter implements WrapperListAdapter, Filterable {
         }
 
         // Footer (off-limits positions will throw an ArrayIndexOutOfBoundsException)
-        return mFooterViewInfos.get(adjPosition - adapterCount).isSelectable;
+        if(mFooterViewInfos.size() > 0) {
+            return mFooterViewInfos.get(adjPosition - adapterCount).isSelectable;
+            }else {
+                  return false;
+            }
     }
 
     public Object getItem(int position) {

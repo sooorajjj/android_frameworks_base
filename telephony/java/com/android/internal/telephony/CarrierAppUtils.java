@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2015 The Android Open Source Project
+ * Copyright (C) 2017-2020 Fairphone B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,13 +19,17 @@ package com.android.internal.telephony;
 
 import android.annotation.Nullable;
 import android.content.ContentResolver;
+import android.content.Context;
+import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.IPackageManager;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.os.RemoteException;
+import android.os.UserManager;
 import android.provider.Settings;
 import android.telephony.TelephonyManager;
+import android.text.TextUtils;
 import android.util.ArrayMap;
 import android.util.ArraySet;
 import android.util.Slog;
@@ -33,6 +38,7 @@ import com.android.internal.annotations.VisibleForTesting;
 import com.android.server.SystemConfig;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -44,6 +50,11 @@ public final class CarrierAppUtils {
     private static final String TAG = "CarrierAppUtils";
 
     private static final boolean DEBUG = false; // STOPSHIP if true
+
+    private static final String SPECIAL_CARRIER_APP_INTENT_SERVICE_CLASS = "com.android.phone.SpecialCarrierAppIntentService";
+    private static final String SPECIAL_CARRIER_APP_ACTION_HANDLE_MATCH = "com.android.phone.SpecialCarrierApp.handle_match";
+    private static final String SPECIAL_CARRIER_APP_EXTRA_APP_INFO = "com.android.phone.SpecialCarrierApp.app_info";
+    private static final String SPECIAL_CARRIER_APP_EXTRA_DEVICE_PROVISIONED = "com.android.phone.SpecialCarrierApp.device_provisioned";
 
     private CarrierAppUtils() {}
 
@@ -242,6 +253,144 @@ public final class CarrierAppUtils {
             }
         } catch (RemoteException e) {
             Slog.w(TAG, "Could not reach PackageManager", e);
+        }
+    }
+
+    /**
+     * Handle special carrier apps which should be disabled until a matching UICC is detected.
+     *
+     * Evaluates the list of applications in config_disabledUntilUsedSpecialCarrierApps. We
+     * want to disable each such application which is present on the system image until an UICC
+     * exposing the right operator code is found (indicating a "match"), without interfering with
+     * the user if they opt to enable/disable the app explicitly.
+     *
+     * So, for each such app, we either disable until used if -and only if- the app is not matching
+     * a carrier AND is in the default state (e.g. not explicitly enabled or disabled by the user),
+     * or we ask the adequate service (SpecialCarrierAppIntentService living in the Telephony
+     * service) to handle our request if the app is matching a carrier and in either the default
+     * state (first boot) or flagged as DISABLED_UNTIL_USED.
+     *
+     * This method differs from
+     * {@link #disableCarrierAppsUntilPrivileged(String, IPackageManager, TelephonyManager, int)} in
+     * two ways:
+     * - The apps are enabled based on the UICC operator code and the package signature; and
+     * - When enabling a carrier app, no permissions are implicitly granted.
+     * If the configuration specifies so (per app), an intents is broadcasted after a carrier app
+     * has been enabled.
+     *
+     * This method is idempotent and is safe to be called at any time; it should be called once at
+     * system startup prior to any application running, as well as any time the set of carrier
+     * privileged apps may have changed.
+     */
+    public synchronized static void disableSpecialCarrierAppsUntilMatched(Context context,
+            IPackageManager packageManager, TelephonyManager telephonyManager, int userId) {
+        if (DEBUG) {
+            Slog.d(TAG, "disableSpecialCarrierAppsUntilMatched");
+        }
+
+        if (!((UserManager) context.getSystemService(Context.USER_SERVICE)).isSystemUser()) {
+            Slog.d(TAG, "Current user is not the owner, special carrier apps matching ignored.");
+            return;
+        }
+
+        String[] specialSystemCarrierAppsDisabledUntilUsed = Resources.getSystem().getStringArray(
+                com.android.internal.R.array.config_disabledUntilUsedSpecialCarrierApps);
+        List<ApplicationInfo> candidates = getDefaultCarrierAppCandidatesHelper(packageManager,
+                userId, new ArraySet<>(Arrays.asList(specialSystemCarrierAppsDisabledUntilUsed)));
+
+        Slog.d(TAG, "Found " + (candidates == null ? 0 : candidates.size()) + " candidate(s) for "
+                + specialSystemCarrierAppsDisabledUntilUsed.length + " special carrier app(s)");
+
+        if (candidates == null || candidates.isEmpty()) {
+            return;
+        }
+
+        String[] simOperatorCodes = new String[telephonyManager.getPhoneCount()];
+        for (int i = 0; i < simOperatorCodes.length; i++) {
+            simOperatorCodes[i] = telephonyManager.getSimOperatorNumericForPhone(i);
+        }
+
+        String[] specialSystemCarrierAppOperatorCodes = Resources.getSystem().getStringArray(
+                com.android.internal.R.array.config_disabledUntilUsedSpecialCarrierAppUiccOperators);
+        String[] specialSystemCarrierAppIntents = Resources.getSystem().getStringArray(
+                com.android.internal.R.array.config_disabledUntilUsedSpecialCarrierAppIntents);
+
+        try {
+            for (ApplicationInfo ai : candidates) {
+                String operatorCodesToMatch = null, actionIntentToBroadcast = null;
+
+                // Only update enabled state for the app on /system. Once it has been updated we
+                // shouldn't touch it.
+                if (ai.isUpdatedSystemApp()) {
+                    if (DEBUG) {
+                        Slog.d(TAG, "Special carrier app candidate '" + ai.packageName
+                                + "' is an updated system app, ignoring");
+                    }
+                    continue;
+                }
+
+                // Not so nice look-up for every package name.
+                // The impact is mitigated by the low amount of items (a handful) expected.
+                for (int i = 0; i < specialSystemCarrierAppsDisabledUntilUsed.length; i++) {
+                    if (ai.packageName.equals(specialSystemCarrierAppsDisabledUntilUsed[i])) {
+                        operatorCodesToMatch = specialSystemCarrierAppOperatorCodes[i];
+                        actionIntentToBroadcast = specialSystemCarrierAppIntents[i];
+                        break;
+                    }
+                }
+
+                // Ignore this candidate if there is no valid operator codes
+                if (TextUtils.isEmpty(operatorCodesToMatch)) {
+                    Slog.e(TAG, "No valid operator codes found in the configuration for candidate "
+                            + ai.packageName);
+                    continue;
+                } else if (DEBUG) {
+                    Slog.d(TAG, "Special carrier app candidate (" + ai.packageName
+                            + ") wants to match against " + operatorCodesToMatch);
+                }
+
+                SpecialCarrierAppInfo appInfo = new SpecialCarrierAppInfo(ai.packageName,
+                        operatorCodesToMatch, actionIntentToBroadcast);
+
+                for (int uiccSlot = 0; uiccSlot < simOperatorCodes.length; uiccSlot++) {
+                    if (appInfo.matchesAgainstOperator(simOperatorCodes[uiccSlot])) {
+                        appInfo.mUiccSlotId = uiccSlot;
+                        appInfo.mCarrierName = TelephonyManager.getDefault().getSimOperatorNameForPhone(uiccSlot);
+                        break;
+                    }
+                }
+
+                if (appInfo.hasMatched()
+                        && (ai.enabledSetting == PackageManager.COMPONENT_ENABLED_STATE_DEFAULT
+                        || ai.enabledSetting ==
+                        PackageManager.COMPONENT_ENABLED_STATE_DISABLED_UNTIL_USED)) {
+                    if (DEBUG) Slog.d(TAG, "Special carrier app candidate (" + ai.packageName
+                            + ") found a match with UICC " + appInfo.mUiccSlotId);
+
+                    boolean isDeviceProvisioned =
+                            Settings.Global.getInt(context.getContentResolver(), Settings.Global.DEVICE_PROVISIONED) == 1;
+
+                    /*
+                     * Defer to the Telephony service to handle the app match.
+                     */
+                    context.startService(new Intent()
+                            .setClassName(context, SPECIAL_CARRIER_APP_INTENT_SERVICE_CLASS)
+                            .setAction(SPECIAL_CARRIER_APP_ACTION_HANDLE_MATCH)
+                            .putExtra(SPECIAL_CARRIER_APP_EXTRA_APP_INFO, appInfo)
+                            .putExtra(SPECIAL_CARRIER_APP_EXTRA_DEVICE_PROVISIONED, isDeviceProvisioned));
+                } else if (!appInfo.hasMatched()
+                        && ai.enabledSetting == PackageManager.COMPONENT_ENABLED_STATE_DEFAULT) {
+                    Slog.i(TAG, "Update state(" + ai.packageName
+                            + "): DISABLED_UNTIL_USED for user " + userId);
+                    packageManager.setApplicationEnabledSetting(ai.packageName,
+                            PackageManager.COMPONENT_ENABLED_STATE_DISABLED_UNTIL_USED, 0,
+                            userId, context.getOpPackageName());
+                }
+            }
+        } catch (RemoteException e) {
+            Slog.e(TAG, "Could not reach PackageManager", e);
+        } catch (Settings.SettingNotFoundException e) {
+            Slog.e(TAG, "Could not read the device provision", e);
         }
     }
 

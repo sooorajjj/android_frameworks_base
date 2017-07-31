@@ -1246,6 +1246,9 @@
   <java-symbol type="array" name="supported_locales" />
   <java-symbol type="array" name="config_cdma_dun_supported_types" />
   <java-symbol type="array" name="config_disabledUntilUsedPreinstalledImes" />
+  <java-symbol type="array" name="config_disabledUntilUsedSpecialCarrierApps" />
+  <java-symbol type="array" name="config_disabledUntilUsedSpecialCarrierAppUiccOperators" />
+  <java-symbol type="array" name="config_disabledUntilUsedSpecialCarrierAppIntents" />
   <java-symbol type="array" name="config_callBarringMMI" />
   <java-symbol type="array" name="config_globalActionsList" />
   <java-symbol type="array" name="config_telephonyEuiccDeviceCapabilities" />

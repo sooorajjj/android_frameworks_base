@@ -26,6 +26,7 @@ import android.content.pm.IPackageManager;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.os.RemoteException;
+import android.os.UserHandle;
 import android.os.UserManager;
 import android.provider.Settings;
 import android.telephony.TelephonyManager;
@@ -288,11 +289,6 @@ public final class CarrierAppUtils {
             Slog.d(TAG, "disableSpecialCarrierAppsUntilMatched");
         }
 
-        if (!((UserManager) context.getSystemService(Context.USER_SERVICE)).isSystemUser()) {
-            Slog.d(TAG, "Current user is not the owner, special carrier apps matching ignored.");
-            return;
-        }
-
         String[] specialSystemCarrierAppsDisabledUntilUsed = Resources.getSystem().getStringArray(
                 com.android.internal.R.array.config_disabledUntilUsedSpecialCarrierApps);
         List<ApplicationInfo> candidates = getDefaultCarrierAppCandidatesHelper(packageManager,
@@ -318,6 +314,7 @@ public final class CarrierAppUtils {
         try {
             for (ApplicationInfo ai : candidates) {
                 String operatorCodesToMatch = null, actionIntentToBroadcast = null;
+                boolean shouldBeMatched = true;
 
                 // Only update enabled state for the app on /system. Once it has been updated we
                 // shouldn't touch it.
@@ -339,24 +336,28 @@ public final class CarrierAppUtils {
                     }
                 }
 
-                // Ignore this candidate if there is no valid operator codes
                 if (TextUtils.isEmpty(operatorCodesToMatch)) {
+                    // There is an error in the configuration
                     Slog.e(TAG, "No valid operator codes found in the configuration for candidate "
                             + ai.packageName);
-                    continue;
+                    // Do not try to match against available operator codes
+                    shouldBeMatched = false;
                 } else if (DEBUG) {
                     Slog.d(TAG, "Special carrier app candidate (" + ai.packageName
                             + ") wants to match against " + operatorCodesToMatch);
                 }
 
                 SpecialCarrierAppInfo appInfo = new SpecialCarrierAppInfo(ai.packageName,
-                        operatorCodesToMatch, actionIntentToBroadcast);
+                        operatorCodesToMatch == null ? "" : operatorCodesToMatch,
+                        actionIntentToBroadcast);
 
-                for (int uiccSlot = 0; uiccSlot < simOperatorCodes.length; uiccSlot++) {
-                    if (appInfo.matchesAgainstOperator(simOperatorCodes[uiccSlot])) {
-                        appInfo.mUiccSlotId = uiccSlot;
-                        appInfo.mCarrierName = TelephonyManager.getDefault().getSimOperatorNameForPhone(uiccSlot);
-                        break;
+                if (shouldBeMatched) {
+                    for (int uiccSlot = 0; uiccSlot < simOperatorCodes.length; uiccSlot++) {
+                        if (appInfo.matchesAgainstOperator(simOperatorCodes[uiccSlot])) {
+                            appInfo.mUiccSlotId = uiccSlot;
+                            appInfo.mCarrierName = TelephonyManager.getDefault().getSimOperatorNameForPhone(uiccSlot);
+                            break;
+                        }
                     }
                 }
 
@@ -370,14 +371,29 @@ public final class CarrierAppUtils {
                     boolean isDeviceProvisioned =
                             Settings.Global.getInt(context.getContentResolver(), Settings.Global.DEVICE_PROVISIONED) == 1;
 
-                    /*
-                     * Defer to the Telephony service to handle the app match.
-                     */
-                    context.startService(new Intent()
-                            .setClassName(context, SPECIAL_CARRIER_APP_INTENT_SERVICE_CLASS)
-                            .setAction(SPECIAL_CARRIER_APP_ACTION_HANDLE_MATCH)
-                            .putExtra(SPECIAL_CARRIER_APP_EXTRA_APP_INFO, appInfo)
-                            .putExtra(SPECIAL_CARRIER_APP_EXTRA_DEVICE_PROVISIONED, isDeviceProvisioned));
+                    if (new UserHandle(userId).isOwner()) {
+                        if (DEBUG) Slog.d(TAG, "Launching the Telephony service to handle the special carrier app candidate ("
+                                + ai.packageName + ") for owner user " + userId);
+                        /*
+                         * Defer to the Telephony service to handle the app match for the owner.
+                         */
+                        context.startService(new Intent()
+                                .setClassName(context, SPECIAL_CARRIER_APP_INTENT_SERVICE_CLASS)
+                                .setAction(SPECIAL_CARRIER_APP_ACTION_HANDLE_MATCH)
+                                .putExtra(SPECIAL_CARRIER_APP_EXTRA_APP_INFO, appInfo)
+                                .putExtra(SPECIAL_CARRIER_APP_EXTRA_DEVICE_PROVISIONED, isDeviceProvisioned));
+                    } else {
+                        /*
+                         * FIXME: Non-owner users will not have a notification.
+                         * The app is left "disabled until used" because there is only one user
+                         * created by the first boot - and that is the owner.
+                         */
+                        Slog.i(TAG, "Update state(" + ai.packageName
+                                + "): DISABLED_UNTIL_USED for non-owner user " + userId);
+                        packageManager.setApplicationEnabledSetting(ai.packageName,
+                                PackageManager.COMPONENT_ENABLED_STATE_DISABLED_UNTIL_USED, 0,
+                                userId, context.getOpPackageName());
+                    }
                 } else if (!appInfo.hasMatched()
                         && ai.enabledSetting == PackageManager.COMPONENT_ENABLED_STATE_DEFAULT) {
                     Slog.i(TAG, "Update state(" + ai.packageName

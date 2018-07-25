@@ -258,6 +258,23 @@ public final class CarrierAppUtils {
     }
 
     /**
+     * Like {@link #disableSpecialCarrierAppsUntilMatched(Context, IPackageManager,
+     * TelephonyManager, int)}, but assumes that no carrier apps have carrier privileges.
+     *
+     * This prevents a potential race condition on first boot - since the app's default state is
+     * enabled, we will initially disable it when the telephony stack is first initialized as it has
+     * not yet read the carrier privilege rules. However, since telephony is initialized later on
+     * late in boot, the app being disabled may have already been started in response to certain
+     * broadcasts. The app will continue to run (briefly) after being disabled, before the Package
+     * Manager can kill it, and this can lead to crashes as the app is in an unexpected state.
+     */
+    public synchronized static void disableSpecialCarrierAppsUntilMatched(Context context,
+            IPackageManager packageManager, int userId) {
+        disableSpecialCarrierAppsUntilMatched(
+                context, packageManager, null /* telephonyManager */, userId);
+    }
+
+    /**
      * Handle special carrier apps which should be disabled until a matching UICC is detected.
      *
      * Evaluates the list of applications in config_disabledUntilUsedSpecialCarrierApps. We
@@ -284,7 +301,7 @@ public final class CarrierAppUtils {
      * privileged apps may have changed.
      */
     public synchronized static void disableSpecialCarrierAppsUntilMatched(Context context,
-            IPackageManager packageManager, TelephonyManager telephonyManager, int userId) {
+            IPackageManager packageManager, @Nullable TelephonyManager telephonyManager, int userId) {
         if (DEBUG) {
             Slog.d(TAG, "disableSpecialCarrierAppsUntilMatched");
         }
@@ -301,9 +318,14 @@ public final class CarrierAppUtils {
             return;
         }
 
-        String[] simOperatorCodes = new String[telephonyManager.getPhoneCount()];
-        for (int i = 0; i < simOperatorCodes.length; i++) {
-            simOperatorCodes[i] = telephonyManager.getSimOperatorNumericForPhone(i);
+        String[] simOperatorCodes;
+        if (telephonyManager != null) {
+            simOperatorCodes = new String[telephonyManager.getPhoneCount()];
+            for (int i = 0; i < simOperatorCodes.length; i++) {
+                simOperatorCodes[i] = telephonyManager.getSimOperatorNumericForPhone(i);
+            }
+        } else {
+            simOperatorCodes = new String[0];
         }
 
         String[] specialSystemCarrierAppOperatorCodes = Resources.getSystem().getStringArray(
@@ -314,7 +336,8 @@ public final class CarrierAppUtils {
         try {
             for (ApplicationInfo ai : candidates) {
                 String operatorCodesToMatch = null, actionIntentToBroadcast = null;
-                boolean shouldBeMatched = true;
+                // Do not try to match if the telephony stack is not ready
+                boolean shouldBeMatched = telephonyManager != null;
 
                 // Only update enabled state for the app on /system. Once it has been updated we
                 // shouldn't touch it.

@@ -21147,6 +21147,9 @@ Slog.v(TAG, ":: stepped forward, applying functor at tag " + parser.getName());
         // disabled after already being started.
         CarrierAppUtils.disableCarrierAppsUntilPrivileged(mContext.getOpPackageName(), this,
                 mContext.getContentResolver(), UserHandle.USER_SYSTEM);
+        // And also disable any special carrier apps.
+        CarrierAppUtils.disableSpecialCarrierAppsUntilMatched(mContext, this,
+                UserHandle.USER_SYSTEM);
 
         // Read the compatibilty setting when the system is ready.
         boolean compatibilityModeEnabled = android.provider.Settings.Global.getInt(

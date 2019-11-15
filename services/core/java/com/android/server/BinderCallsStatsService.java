@@ -16,12 +16,14 @@
 
 package com.android.server;
 
+import android.app.ActivityThread;
 import android.os.Binder;
 import android.os.ServiceManager;
 import android.os.SystemProperties;
 import android.util.Slog;
 
 import com.android.internal.os.BinderCallsStats;
+import com.android.internal.util.DumpUtils;
 
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
@@ -29,13 +31,14 @@ import java.io.PrintWriter;
 public class BinderCallsStatsService extends Binder {
 
     private static final String TAG = "BinderCallsStatsService";
+    private static final String SERVICE_NAME = "binder_calls_stats";
 
     private static final String PERSIST_SYS_BINDER_CALLS_DETAILED_TRACKING
             = "persist.sys.binder_calls_detailed_tracking";
 
     public static void start() {
         BinderCallsStatsService service = new BinderCallsStatsService();
-        ServiceManager.addService("binder_calls_stats", service);
+        ServiceManager.addService(SERVICE_NAME, service);
         boolean detailedTrackingEnabled = SystemProperties.getBoolean(
                 PERSIST_SYS_BINDER_CALLS_DETAILED_TRACKING, false);
 
@@ -54,6 +57,11 @@ public class BinderCallsStatsService extends Binder {
 
     @Override
     protected void dump(FileDescriptor fd, PrintWriter pw, String[] args) {
+        if (!DumpUtils.checkDumpAndUsageStatsPermission(ActivityThread.currentApplication(),
+                SERVICE_NAME, pw)) {
+            return;
+        }
+
         if (args != null) {
             for (final String arg : args) {
                 if ("-a".equals(arg)) {

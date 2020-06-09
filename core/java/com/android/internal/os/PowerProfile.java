@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2009 The Android Open Source Project
+ * Copyright (C) 2018-2020 Fairphone B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,9 +18,11 @@
 package com.android.internal.os;
 
 
+import android.annotation.Nullable;
 import android.content.Context;
 import android.content.res.Resources;
 import android.content.res.XmlResourceParser;
+import android.util.Log;
 
 import com.android.internal.annotations.VisibleForTesting;
 import com.android.internal.util.XmlUtils;
@@ -27,6 +30,8 @@ import com.android.internal.util.XmlUtils;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -37,6 +42,8 @@ import java.util.HashMap;
  * [hidden]
  */
 public class PowerProfile {
+
+    private static final String TAG = "PowerProfile";
 
     /*
      * POWER_CPU_SUSPEND: Power consumption when CPU is in power collapse mode.
@@ -221,6 +228,9 @@ public class PowerProfile {
     private static final String TAG_ARRAYITEM = "value";
     private static final String ATTR_NAME = "name";
 
+    private static final String FILENAME_BATTERY_DESIGN_CAPACITY =
+            "/sys/class/power_supply/bms/charge_full_design";
+
     private static final Object sLock = new Object();
 
     @VisibleForTesting
@@ -324,6 +334,43 @@ public class PowerProfile {
             if (value > 0) {
                 sPowerItemMap.put(key, (double) value);
             }
+        }
+
+        /*
+         * There is no way to set the battery design capacity automatically here from what the
+         * kernel exposes in the sysfs. Several battery packs can be available for the device and
+         * they might have different capacities. So do not rely on the XML power profile and always
+         * use what the kernel exposes instead.
+         */
+        try {
+            // Read the battery design capacity from the sysfs, in microampere-hour
+            int batteryDesignCapacityMicro =
+                    Integer.parseInt(readLine(FILENAME_BATTERY_DESIGN_CAPACITY));
+            // Unconditionally store the sysfs capacity, in milliampere-hour
+            sPowerItemMap.put(POWER_BATTERY_CAPACITY, ((double) batteryDesignCapacityMicro) / 1000);
+        } catch (IOException ioe) {
+            Log.e(TAG, "Cannot read battery capacity from "
+                    + FILENAME_BATTERY_DESIGN_CAPACITY, ioe);
+        } catch (NumberFormatException nfe) {
+            Log.e(TAG, "Read a badly formatted battery capacity from "
+                    + FILENAME_BATTERY_DESIGN_CAPACITY, nfe);
+        }
+    }
+
+    /**
+    * Reads a line from the specified file.
+    *
+    * @param filename The file to read from.
+    * @return The first line up to 256 characters, or <code>null</code> if file is empty.
+    * @throws IOException If the file couldn't be read.
+    */
+    @Nullable
+    private static String readLine(String filename) throws IOException {
+        final BufferedReader reader = new BufferedReader(new FileReader(filename), 256);
+        try {
+            return reader.readLine();
+        } finally {
+            reader.close();
         }
     }
 

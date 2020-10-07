@@ -71,7 +71,7 @@ CopyResult OpenGLReadback::copySurfaceInto(Surface& surface, const Rect& srcRect
 
 namespace {
 
-CopyResult copyFromPrivateHandle(GraphicBuffer* graphicBuffer, Matrix4& /*texTransform*/,
+CopyResult copyFromPrivateHandle(GraphicBuffer* graphicBuffer, Matrix4& texTransform,
                                  const Rect& srcRect, SkBitmap* bitmap) {
 
     static const bool workaround_enabled =
@@ -82,6 +82,33 @@ CopyResult copyFromPrivateHandle(GraphicBuffer* graphicBuffer, Matrix4& /*texTra
     }();
 
     if (!workaround_enabled) {
+        return CopyResult::UnknownError;
+    }
+
+    static const Matrix4 defaultTransform = []() {
+        const float matrixData[] = {
+            1.f,  0.f,  0.f,  0.f,
+            0.f, -1.f,  0.f,  0.f,
+            0.f,  0.f,  1.f,  0.f,
+            0.f,  1.f,  0.f,  1.f
+        };
+        return Matrix4(matrixData);
+    }();
+
+    const int bitmapWidth = bitmap->width();
+    const int bitmapHeight = bitmap->height();
+
+    if (static_cast<int64_t>(graphicBuffer->getWidth()) != bitmapWidth
+        || static_cast<int64_t>(graphicBuffer->getHeight()) != bitmapHeight
+        || (!srcRect.isEmpty() &&
+            (srcRect.getWidth() != bitmapWidth || srcRect.getHeight() != bitmapHeight))
+        || texTransform != defaultTransform) {
+        // Image transformation isn't supported in any way here. Fall back to
+        // the default implementation.
+        // See CtsViewTestCases/android.view.cts.PixelCopyTest for the various
+        // ways in which scaling needs to be supported.
+        ALOGI("copyFromPrivateHandle: Image transformation is requested but not supported. "
+            "Falling back to the default implementation.");
         return CopyResult::UnknownError;
     }
 
@@ -99,8 +126,6 @@ CopyResult copyFromPrivateHandle(GraphicBuffer* graphicBuffer, Matrix4& /*texTra
     }
     const private_handle_t* hnd = static_cast<const private_handle_t*>(native_handle);
 
-    const int bitmapWidth = bitmap->width();
-    const int bitmapHeight = bitmap->height();
     // May be aligned and be larger than the actual image.
     const int bufferWidth = hnd->width;
     const int bufferHeight = hnd->height;

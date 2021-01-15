@@ -450,6 +450,8 @@ public final class SystemServer {
             }
         }
 
+        checkLastShutdownWasClean();
+
         // Loop forever.
         Looper.loop();
         throw new RuntimeException("Main thread loop unexpectedly exited");
@@ -1941,5 +1943,19 @@ public final class SystemServer {
 
     private static void traceEnd() {
         BOOT_TIMINGS_TRACE_LOG.traceEnd();
+    }
+
+    private static void checkLastShutdownWasClean() {
+        // On clean (planned) shutdown, the ShutdownThread sets persist.runtime.shutdown_planned to
+        // true. On initial boot it's unset; so we consider it to be a clean boot.
+        boolean lastShutdownWasClean =
+            SystemProperties.getBoolean("persist.runtime.shutdown_planned", true);
+
+        // Don't make this a read-only property: A runtime crash is considered a "unclean shutdown",
+        // so we would then set it to 0.
+        SystemProperties.set("runtime.last_shutdown_was_clean",
+            lastShutdownWasClean ? "1" : "0");
+
+        SystemProperties.set("persist.runtime.shutdown_planned", "0");
     }
 }

@@ -533,6 +533,7 @@ public final class ShutdownThread extends Thread {
         shutdownTimingLog.traceEnd(); // SystemServerShutdown
         metricEnded(METRIC_SYSTEM_SERVER);
         saveMetrics(mReboot, mReason);
+        registerPlannedShutdown();
         // Remaining work will be done by init, including vold shutdown
         rebootOrShutdown(mContext, mReboot, mReason);
     }
@@ -707,6 +708,10 @@ public final class ShutdownThread extends Thread {
         if (saved) {
             tmp.renameTo(new File(METRICS_FILE_BASENAME + ".txt"));
         }
+    }
+
+    private static void registerPlannedShutdown() {
+        SystemProperties.set("persist.runtime.shutdown_planned", "1");
     }
 
     private void uncrypt() {

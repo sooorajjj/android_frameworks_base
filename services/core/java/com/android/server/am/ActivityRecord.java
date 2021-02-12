@@ -1888,6 +1888,31 @@ final class ActivityRecord extends ConfigurationContainer implements AppWindowCo
             // pause and then resume again later, which will result in a double life-cycle event.
             stack.checkReadyForSleep();
         }
+
+        service.mAppOpsService.handlePackageResumed(this.app.uid, this.packageName);
+        updatePrivacyGuardNotificationLocked();
+    }
+
+    private final void updatePrivacyGuardNotificationLocked() {
+        String privacyGuardPackageName = mStackSupervisor.mPrivacyGuardPackageName;
+        if (privacyGuardPackageName != null && privacyGuardPackageName.equals(this.packageName)) {
+            return;
+        }
+
+        boolean privacy = service.mAppOpsService.getPrivacyGuardSettingForPackage(
+                this.app.uid, this.packageName);
+
+        if (privacyGuardPackageName != null && !privacy) {
+            Message msg = service.mHandler.obtainMessage(
+                    ActivityManagerService.CANCEL_PRIVACY_NOTIFICATION_MSG, this.userId);
+            msg.sendToTarget();
+            mStackSupervisor.mPrivacyGuardPackageName = null;
+        } else if (privacy) {
+            Message msg = service.mHandler.obtainMessage(
+                    ActivityManagerService.POST_PRIVACY_NOTIFICATION_MSG, this);
+            msg.sendToTarget();
+            mStackSupervisor.mPrivacyGuardPackageName = this.packageName;
+        }
     }
 
     final void activityStoppedLocked(Bundle newIcicle, PersistableBundle newPersistentState,
